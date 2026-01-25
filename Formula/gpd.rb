@@ -7,22 +7,22 @@ class Gpd < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.2.0/gpd-darwin-arm64"
-      sha256 "8cc8b044384c9e58464e90b7b83a48c43622e1eab8a4f3be54d422bdc47af77e"
+      sha256 "11a21c5957b0a4cbb7972e7e5580af3bf746c2ea601a2ec1781fd70af69b349b"
     end
     if Hardware::CPU.intel?
       url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.2.0/gpd-darwin-amd64"
-      sha256 "784108b4c8c1b46c2612001529fbb71f4317d61b71894b94fce06e63f03b4116"
+      sha256 "60e420f548c51c5080b988a293405c670e59d62c8763489d2bc543dd1429ea4b"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
       url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.2.0/gpd-linux-arm64"
-      sha256 "7ed8b08df194d4e799d07692416d7cdf1d5047808714b94ef78afb0e051e61e6"
+      sha256 "491f13481aefe306bcca6f4b95491ac3506266a11e1620307e116736ff929303"
     end
     if Hardware::CPU.intel?
       url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.2.0/gpd-linux-amd64"
-      sha256 "275a151d61bae4e7cfd6068d38edfaa27a80db74cd8358343ffbe05836d2e10a"
+      sha256 "7213ef6f03784f8754a5aee9b1478e9053a6e63ecd17646b9eca9a524bd82db3"
     end
   end
 
