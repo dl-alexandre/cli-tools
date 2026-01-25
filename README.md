@@ -9,12 +9,11 @@
 
 ## Install
 
-```bash
-brew tap dl-alexandre/tap
+`brew tap dl-alexandre/tap`bash
 
 # Google Drive CLI
-brew install gdrv
+`brew install gdrv`
 
 # Google Play Developer CLI
-brew install gpd
-```
+`brew install gpd`
+
