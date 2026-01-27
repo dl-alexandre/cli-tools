@@ -1,28 +1,28 @@
 class Gpd < Formula
   desc "Google Play Developer CLI for managing Play Console operations"
   homepage "https://github.com/dl-alexandre/Google-Play-Developer-CLI"
-  version "v3.0.0"
+  version "v0.3.0"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v3.0.0/gpd-darwin-arm64"
-      sha256 "154b597af961883c8e01283401869f8220886948c539b8025c4fb7e7f5e93be8"
+      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.3.0/gpd-darwin-arm64"
+      sha256 "63c8d3bc8543786c96183bf5cb669b91fc74db80a454c771a42e4860ff92bec3"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v3.0.0/gpd-darwin-amd64"
-      sha256 "11005a358b2257c6d0cf202cd6ec60e3d0e2172a9eb549db5abe41dec22319a2"
+      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.3.0/gpd-darwin-amd64"
+      sha256 "12241a3cd4d946e4fde60d954d0ff6c4d8a5b93f62525a3f9736453a6295abec"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v3.0.0/gpd-linux-arm64"
-      sha256 "568f49f887e7d024a930a04d8576a95b5327fd34e657210fa9c687e5dc200537"
+      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.3.0/gpd-linux-arm64"
+      sha256 "b8078bde82c90b9402de3e32d507cae60159d218fb5dea4c7c1e285b7528e1cb"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v3.0.0/gpd-linux-amd64"
-      sha256 "0e5f20deb958448a39da8a08e5ca9e4b6ec985a9c353f8912f9688738c87facc"
+      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.3.0/gpd-linux-amd64"
+      sha256 "f7505e5289d57813db95bb503836f62e385bac4dd3d3a76d53a34f4ef75b5b08"
     end
   end
 
