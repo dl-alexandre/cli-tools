@@ -1,28 +1,28 @@
 class Cimis < Formula
   desc "CIMIS time-series database CLI tool with streaming and querying support"
   homepage "https://github.com/dl-alexandre/cimis-cli"
-  version "v0.0.1"
+  version "v0.0.2"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.1/cimis-darwin-arm64"
-      sha256 "ad8d94c999098034505a6f2b02912c8626b3e20d0cab803c3b42cb440054ebdc"
+      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.2/cimis-darwin-arm64"
+      sha256 "575df414bcb5e538e40349bd068ff3590ce488d4b62cf510dc5f9ec2b1ffa000"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.1/cimis-darwin-amd64"
-      sha256 "d8f968f8796ba64cf4b70d55daa3efe32b0c9ff6d466f4443ed0cc627073505e"
+      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.2/cimis-darwin-amd64"
+      sha256 "eb20ed2d2dc3769dda66c919ef852cfa011b3e36c9cb80485b27d7b71c9b531a"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.1/cimis-linux-arm64"
-      sha256 "ad9ac256907205b00ed2084eabfbc2131e2a53437ba28e694095760e502c3e86"
+      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.2/cimis-linux-arm64"
+      sha256 "c0d7a29a58ffc4458bf64edb0c5a4e5207ce91fdb75ddd69592baada308ad4ec"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.1/cimis-linux-amd64"
-      sha256 "5faf5fb400867f56db759e16d1e8d2cd41fa923dcc9181eb37cedfe079835fce"
+      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.2/cimis-linux-amd64"
+      sha256 "d947c92e1674330ec375d8d81092427467186419d31da57a9a5b092be604504e"
     end
   end
 
