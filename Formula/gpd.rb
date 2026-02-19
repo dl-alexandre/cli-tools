@@ -5,21 +5,21 @@
 class Gpd < Formula
   desc "Google Play Developer CLI - fast, lightweight CLI for Google Play Console"
   homepage "https://github.com/dl-alexandre/gpd"
-  version "0.4.2"
+  version "0.4.3"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.4.2/gpd_0.4.2_darwin_x86_64.tar.gz"
-      sha256 "1a19b91d36b0ae249577e46d8ccc41be90048ce662a55a554dfa3ca022f39e1f"
+      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.4.3/gpd_0.4.3_darwin_x86_64.tar.gz"
+      sha256 "8fef3339e0ffd129b727d591205b67337bec7db9faa19760e9a54c5b96bd7d5c"
 
       def install
         bin.install "gpd"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.4.2/gpd_0.4.2_darwin_arm64.tar.gz"
-      sha256 "4aa6fe56d43748c3c3d1090f9e6ad20a0e1a3dcba6afdafad3437a88501bbb6c"
+      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.4.3/gpd_0.4.3_darwin_arm64.tar.gz"
+      sha256 "54c5afddabe8cbe0a762f6155b7620c687912a722c1bc74d7fc5de970bee257f"
 
       def install
         bin.install "gpd"
@@ -29,15 +29,15 @@ class Gpd < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.4.2/gpd_0.4.2_linux_x86_64.tar.gz"
-      sha256 "e0c39ca1e99ed1717da90e840d3604c8158dee4e1455997478969ad57d175b0e"
+      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.4.3/gpd_0.4.3_linux_x86_64.tar.gz"
+      sha256 "6e763facd3ac527eed705b47ea84b55c7fa73eb43238a974812d0fc20f3238d3"
       def install
         bin.install "gpd"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.4.2/gpd_0.4.2_linux_arm64.tar.gz"
-      sha256 "c8a8fc5088cf56fadbb03e609a5041baa5fd87629abf6fc434c83b253e7b6893"
+      url "https://github.com/dl-alexandre/Google-Play-Developer-CLI/releases/download/v0.4.3/gpd_0.4.3_linux_arm64.tar.gz"
+      sha256 "bfce7bc7172c4ba6726daab28e7ec184ed6cb917e0d43c5fe7f9ba5ddf5e5f00"
       def install
         bin.install "gpd"
       end
