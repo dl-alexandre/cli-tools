@@ -1,28 +1,28 @@
 class Gdrv < Formula
   desc "Google Drive CLI with full read/write support"
   homepage "https://github.com/dl-alexandre/Google-Drive-CLI"
-  version "v0.4.3"
+  version "v0.5.0"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.4.3/gdrv-darwin-arm64"
-      sha256 "7b076820bce8fd4176d166265709cb7576b4800c140a749ee17bc84c3d1af144"
+      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.5.0/gdrv-darwin-arm64"
+      sha256 "556b9eaebb1c7aa07cab2ef34d8852e4c758ce15d7d2676ed1fbcde03d2e5bc4"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.4.3/gdrv-darwin-amd64"
-      sha256 "0a7ece0fc22892487f23e48788c20b3c8851132b2637655af40ccd718f60175b"
+      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.5.0/gdrv-darwin-amd64"
+      sha256 "922d2fbcd512023f419a841175a829f4371abfb8fda9d7b99d4f1fb192780836"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.4.3/gdrv-linux-arm64"
-      sha256 "4a0de2016c15faea0deeda15d1b6679ce30ef48f8bee9107bf1487e61d862a9a"
+      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.5.0/gdrv-linux-arm64"
+      sha256 "646bf862f40b68bcecf0f8b9cbfc5a0d3e235f331c9b610122f353cb4550569d"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.4.3/gdrv-linux-amd64"
-      sha256 "0339122865bdb0b549e6854a5c0ed7e659a14457e8da7f9f6974a8a94716184c"
+      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.5.0/gdrv-linux-amd64"
+      sha256 "e57a7e14f11c428315dc04b4ba601544d16810e6eff622049b24303570f856e4"
     end
   end
 
