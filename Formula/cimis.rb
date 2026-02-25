@@ -1,36 +1,33 @@
 class Cimis < Formula
   desc "CIMIS time-series database CLI tool with streaming and querying support"
   homepage "https://github.com/dl-alexandre/cimis-cli"
-  version "v0.0.2"
+  version "v0.0.3"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.2/cimis-darwin-arm64"
-      sha256 "575df414bcb5e538e40349bd068ff3590ce488d4b62cf510dc5f9ec2b1ffa000"
+      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.3/cimis-darwin-arm64.tar.gz"
+      sha256 "9c5efe3fe64d7d07fe2286c8e8f785e9a0e9ba3ab069c1d151ae7ff39d73c2a0"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.2/cimis-darwin-amd64"
-      sha256 "eb20ed2d2dc3769dda66c919ef852cfa011b3e36c9cb80485b27d7b71c9b531a"
+      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.3/cimis-darwin-amd64.tar.gz"
+      sha256 "77e17c0c913aef24c397029116afbfd4c095a1a56cd99e48e9106e7e84047281"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.2/cimis-linux-arm64"
-      sha256 "c0d7a29a58ffc4458bf64edb0c5a4e5207ce91fdb75ddd69592baada308ad4ec"
+      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.3/cimis-linux-arm64.tar.gz"
+      sha256 "63aaca37285a58f491755b6a8309be0192984f1c51364a3916fdb01a180fd65a"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.2/cimis-linux-amd64"
-      sha256 "d947c92e1674330ec375d8d81092427467186419d31da57a9a5b092be604504e"
+      url "https://github.com/dl-alexandre/cimis-cli/releases/download/v0.0.3/cimis-linux-amd64.tar.gz"
+      sha256 "77358fbea8a90f740dd0003c34d35d06c3808d92ea1a430d5aa22f792ee47d52"
     end
   end
 
   def install
-    bin.install "cimis-darwin-arm64" => "cimis" if OS.mac? && Hardware::CPU.arm?
-    bin.install "cimis-darwin-amd64" => "cimis" if OS.mac? && Hardware::CPU.intel?
-    bin.install "cimis-linux-arm64" => "cimis" if OS.linux? && Hardware::CPU.arm?
-    bin.install "cimis-linux-amd64" => "cimis" if OS.linux? && Hardware::CPU.intel?
+    bin.install "cimis"
   end
 
   test do
