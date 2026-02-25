@@ -7,7 +7,7 @@ class Gdrv < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.5.1/gdrv-darwin-arm64.tar.gz"
-      sha256 "bbf87d6aa901986a8cb0b5f292dc7d83c22802c7163b2cfc91d19e392c3d3f82"
+      sha256 "01cbafc52c115bcf1c8dd6bf5e60de4fdb8a64e4cad5c90ba0511153d4697d28"
     end
     if Hardware::CPU.intel?
       url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.5.1/gdrv-darwin-amd64.tar.gz"
