@@ -4,9 +4,11 @@
 
 | Formula | Description |
 |---------|-------------|
+| [`abc`](https://github.com/dl-alexandre/Apple-Business-Connect-CLI) | Apple Business Connect CLI |
 | [`ams`](https://github.com/dl-alexandre/Apple-Map-Server-CLI) | Apple Map Server CLI |
 | [`ask`](https://github.com/dl-alexandre/App-StoreKit-CLI) | App StoreKit CLI |
 | [`cimis`](https://github.com/dl-alexandre/cimis-cli) | California Irrigation Management CLI |
+| [`cli-template`](https://github.com/dl-alexandre/cli-template) | Go CLI Template (example/template CLI) |
 | [`gdrv`](https://github.com/dl-alexandre/Google-Drive-CLI) | Google Drive CLI |
 | [`gpd`](https://github.com/dl-alexandre/Google-Play-Developer-CLI) | Google Play Developer CLI |
 | [`mpr`](https://github.com/dl-alexandre/MyMarketNews-CLI) | USDA MyMarketNews CLI |
