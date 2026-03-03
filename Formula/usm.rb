@@ -1,28 +1,28 @@
 class Usm < Formula
   desc "UniFi Site Manager CLI for cloud-based site management"
   homepage "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI"
-  version "v0.0.1"
+  version "v0.0.3"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.1/usm-darwin-arm64"
-      sha256 "PLACEHOLDER_SHA256"
+      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-darwin-arm64"
+      sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.1/usm-darwin-amd64"
-      sha256 "PLACEHOLDER_SHA256"
+      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-darwin-amd64"
+      sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.1/usm-linux-arm64"
-      sha256 "PLACEHOLDER_SHA256"
+      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-linux-arm64"
+      sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.1/usm-linux-amd64"
-      sha256 "PLACEHOLDER_SHA256"
+      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-linux-amd64"
+      sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
     end
   end
 
