@@ -6,31 +6,40 @@ class Usm < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-darwin-arm64"
-      sha256 "146686a543830f5f147e124a6878b1d47cde3e23356c8fff960056d63425801f"
+      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-darwin-arm64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "usm"
+      end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-darwin-amd64"
-      sha256 "e8710efe87e60faedc5c9285d6df5c4a5898a79c9ad2ba8886aae3780fff2031"
+      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-darwin-amd64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "usm"
+      end
     end
   end
 
   on_linux do
-    if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-linux-arm64"
-      sha256 "ee96a1e08fd8404f7b7cc1888b8aefb276f862a7a8c71b56c2e41a5da369e9de"
-    end
-    if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-linux-amd64"
-      sha256 "e6c7d03d0bc508df23ff36a802723e4c6ed2cebc58a89ed3c40ec48aa7b6599d"
-    end
-  end
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-linux-arm64.tar.gz"
+      sha256 "TO_BE_UPDATED"
 
-  def install
-    bin.install "usm-darwin-arm64" => "usm" if OS.mac? && Hardware::CPU.arm?
-    bin.install "usm-darwin-amd64" => "usm" if OS.mac? && Hardware::CPU.intel?
-    bin.install "usm-linux-arm64" => "usm" if OS.linux? && Hardware::CPU.arm?
-    bin.install "usm-linux-amd64" => "usm" if OS.linux? && Hardware::CPU.intel?
+      def install
+        bin.install "usm"
+      end
+    end
+    if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
+      url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v0.0.3/usm-linux-amd64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "usm"
+      end
+    end
   end
 
   test do

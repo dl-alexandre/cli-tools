@@ -1,16 +1,44 @@
 class Ask < Formula
   desc "App Store Kit CLI for in-app purchases and subscriptions"
   homepage "https://github.com/dl-alexandre/App-StoreKit-CLI"
-  url "https://github.com/dl-alexandre/App-StoreKit-CLI/archive/refs/tags/v0.0.2.tar.gz"
-  sha256 "e3ba4bc74331a2d80a694fe623d8cfa22410fd244aaad9959f2ecfaa20f5b5a0"
   version "v0.0.2"
   license "MIT"
 
-  depends_on "go" => :build
+  on_macos do
+    if Hardware::CPU.arm?
+      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.2/ask-darwin-arm64.tar.gz"
+      sha256 "TO_BE_UPDATED"
 
-  def install
-    cd "cmd/ask" do
-      system "go", "build", "-o", bin/"ask", "."
+      def install
+        bin.install "ask"
+      end
+    end
+    if Hardware::CPU.intel?
+      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.2/ask-darwin-amd64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "ask"
+      end
+    end
+  end
+
+  on_linux do
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.2/ask-linux-arm64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "ask"
+      end
+    end
+    if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
+      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.2/ask-linux-amd64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "ask"
+      end
     end
   end
 

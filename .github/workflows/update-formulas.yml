@@ -19,6 +19,8 @@ jobs:
     - name: Checkout tap repository
       uses: actions/checkout@v4
       with:
+        # TAP_TOKEN requires repo scope and workflow permissions to create pull requests
+        # Generate at: https://github.com/settings/tokens with 'repo' and 'workflow' scopes
         token: ${{ secrets.TAP_TOKEN }}
 
     - name: Set up Ruby
@@ -36,6 +38,7 @@ jobs:
         git config --global user.name "GitHub Actions"
 
     - name: Update formulas
+      id: update
       env:
         GITHUB_TOKEN: ${{ secrets.TAP_TOKEN }}
         REPOS: |
@@ -77,6 +80,7 @@ jobs:
               
               # Calculate SHA256 for each platform
               sha256s = {}
+              failed_platforms = []
               
               platforms = {
                 'darwin-arm64' => 'on_macos arm?',
@@ -94,8 +98,17 @@ jobs:
                   sha256s[platform] = sha256
                   puts "  SHA256: #{sha256}"
                 rescue => e
-                  puts "  Warning: Could not download #{platform}: #{e.message}"
+                  puts "  Error: Could not download #{platform}: #{e.message}"
+                  failed_platforms << platform
                 end
+              end
+              
+              # Fail if core platforms fail (macOS ARM and AMD64, Linux AMD64)
+              core_platforms = ['darwin-arm64', 'darwin-amd64', 'linux-amd64']
+              core_failures = failed_platforms & core_platforms
+              if core_failures.any?
+                puts "ERROR: Failed to download core platforms: #{core_failures.join(', ')}"
+                exit 1
               end
               
               # Update formula content
@@ -138,8 +151,11 @@ jobs:
             "This PR updates the following formulas:\n\n#{pr_body}"
           )
           
+          # Set output for pr_created flag
+          puts "pr_created=true" >> ENV['GITHUB_OUTPUT']
           puts "Created PR for #{updated.length} formula(s)"
         else
+          puts "pr_created=false" >> ENV['GITHUB_OUTPUT']
           puts "All formulas are up to date"
         end
       shell: ruby {0}
@@ -155,17 +171,21 @@ jobs:
     - name: Set up Homebrew
       uses: Homebrew/actions/setup-homebrew@master
 
-    - name: Test formulas
+    - name: Discover and test formulas
       run: |
         brew tap dl-alexandre/tap
         brew update
         
-        # Test each formula
-        for formula in abc ams ask cimis cli-template gdrv gpd mpr unifi usm; do
+        # Dynamically discover all formulas in the Formula directory
+        FORMULAS=$(find . -name "*.rb" -path "*/Formula/*" -exec basename {} .rb \; | sort)
+        
+        # Test each discovered formula
+        for formula in $FORMULAS; do
           if brew info dl-alexandre/tap/$formula &>/dev/null; then
             echo "Testing $formula..."
             brew install dl-alexandre/tap/$formula
-            $formula --version || true
+            $formula --version
             brew uninstall dl-alexandre/tap/$formula
           fi
         done
+      working-directory: ${{ github.workspace }}

@@ -1,16 +1,44 @@
 class Ams < Formula
   desc "Apple Maps Server API CLI for location services"
   homepage "https://github.com/dl-alexandre/Apple-Map-Server-CLI"
-  url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/archive/refs/tags/v0.0.7.tar.gz"
-  sha256 "UPDATE_AFTER_PUSH"
   version "v0.0.7"
   license "MIT"
 
-  depends_on "go" => :build
+  on_macos do
+    if Hardware::CPU.arm?
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.7/ams-darwin-arm64.tar.gz"
+      sha256 "TO_BE_UPDATED"
 
-  def install
-    cd "cmd/ams" do
-      system "go", "build", "-o", bin/"ams", "."
+      def install
+        bin.install "ams"
+      end
+    end
+    if Hardware::CPU.intel?
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.7/ams-darwin-amd64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "ams"
+      end
+    end
+  end
+
+  on_linux do
+    if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.7/ams-linux-arm64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "ams"
+      end
+    end
+    if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.7/ams-linux-amd64.tar.gz"
+      sha256 "TO_BE_UPDATED"
+
+      def install
+        bin.install "ams"
+      end
     end
   end
 
