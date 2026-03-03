@@ -1,9 +1,9 @@
 class Ams < Formula
   desc "Apple Maps Server API CLI for location services"
   homepage "https://github.com/dl-alexandre/Apple-Map-Server-CLI"
-  url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/archive/refs/tags/v0.0.2.tar.gz"
-  sha256 "c0ffecb01f957e95caf589927c2bca7a8dca7569a56837e7ea5f0f276ba25562"
-  version "v0.0.2"
+  url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/archive/refs/tags/v0.0.7.tar.gz"
+  sha256 "UPDATE_AFTER_PUSH"
+  version "v0.0.7"
   license "MIT"
 
   depends_on "go" => :build
