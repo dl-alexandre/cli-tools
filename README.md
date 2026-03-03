@@ -10,6 +10,7 @@
 | [`gdrv`](https://github.com/dl-alexandre/Google-Drive-CLI) | Google Drive CLI |
 | [`gpd`](https://github.com/dl-alexandre/Google-Play-Developer-CLI) | Google Play Developer CLI |
 | [`mpr`](https://github.com/dl-alexandre/MyMarketNews-CLI) | USDA MyMarketNews CLI |
+| [`unifi`](https://github.com/dl-alexandre/Local-UniFi-CLI) | Local UniFi Controller CLI |
 | [`usm`](https://github.com/dl-alexandre/UniFi-Site-Manager-CLI) | UniFi Site Manager CLI |
 
 ## Install
