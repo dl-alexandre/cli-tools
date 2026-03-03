@@ -45,6 +45,10 @@ jobs:
           dl-alexandre/Local-UniFi-CLI:unifi
           dl-alexandre/UniFi-Site-Manager-CLI:usm
       run: |
+        # Configure git
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+        
         require 'octokit'
         require 'open-uri'
         require 'digest'
