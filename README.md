@@ -1,5 +1,7 @@
 # Homebrew Tap
 
+Automated Homebrew tap for dl-alexandre CLI tools. This repository automatically updates formulas when new releases are published.
+
 ## Available Formulas
 
 | Formula | Description |
@@ -23,3 +25,23 @@ brew install <formula>
 ```
 
 See each formula's repository for usage documentation.
+
+## Automation
+
+This tap uses a Ruby-based GitHub Actions workflow to:
+- Check for new releases daily at 00:00 UTC
+- Calculate SHA256 hashes for all platform binaries
+- Create Pull Requests with updated formulas
+- Test formulas on both macOS and Linux before merging
+
+## Development
+
+### GoReleaser Configuration
+
+If you're developing a CLI tool for this tap, see [GoReleaser Configuration Guide](docs/GORELEASER_GUIDE.md) for the exact build configuration needed to integrate with our automation.
+
+### Token Permissions
+
+The `TAP_TOKEN` secret requires:
+- `contents:write` - To create branches and commit formula updates
+- `pull_requests:write` - To create pull requests with formula updates
