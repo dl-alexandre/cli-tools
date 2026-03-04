@@ -107,8 +107,9 @@ jobs:
               core_platforms = ['darwin-arm64', 'darwin-amd64', 'linux-amd64']
               core_failures = failed_platforms & core_platforms
               if core_failures.any?
-                puts "ERROR: Failed to download core platforms: #{core_failures.join(', ')}"
-                exit 1
+                puts "WARNING: Failed to download core platforms for #{formula}: #{core_failures.join(', ')}"
+                puts "Skipping #{formula} - release assets may not be published yet"
+                next  # Skip this formula and continue to next one
               end
               
               # Update formula content
