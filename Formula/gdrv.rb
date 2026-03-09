@@ -7,22 +7,22 @@ class Gdrv < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.0/gdrv-darwin-arm64.tar.gz"
-      sha256 "37d941aab04afbd51b876cb10958feec4ec20844c781ea8608248f51d0082e5a"
+      sha256 "b5248b1d11a173525b53e3fc0fba0f45b327210c095600baefa2559f5ca58160"
     end
     if Hardware::CPU.intel?
       url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.0/gdrv-darwin-amd64.tar.gz"
-      sha256 "1fc8da6973b4847c75ff505d3b589999139d8350be1b87ab3aa646393c47ffe2"
+      sha256 "9337c8198f735744fa0c4d139a5df1656d7e2acac2673ed9ca9de8225b05c323"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
       url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.0/gdrv-linux-arm64.tar.gz"
-      sha256 "84341163607d752ce483af556930b67bacb135f3eae871046d3b19b852e09293"
+      sha256 "10bb3e9d03d329ae3b7631eabaea7ee5b1c3e5e5c5126dad4d4ff862b69d59df"
     end
     if Hardware::CPU.intel?
       url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.0/gdrv-linux-amd64.tar.gz"
-      sha256 "da4b1d68dadd36c6f168a3b0223615c49592d195c7c2e772f7ab514e8914228a"
+      sha256 "c6814cade75859644419240cbd8b6fbef49e78d3164d069472e91eec98555d12"
     end
   end
 
