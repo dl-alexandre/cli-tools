@@ -1,4 +1,4 @@
-class XCli < Formula
+class X < Formula
   desc "Terminal-first CLI for X/Twitter with native Go transaction ID generation"
   homepage "https://github.com/dl-alexandre/X-CLI"
   url "https://github.com/dl-alexandre/X-CLI/archive/refs/tags/v0.0.1.tar.gz"
@@ -20,6 +20,9 @@ class XCli < Formula
         mkdir -p ~/.config/x
         cp #{pkgshare}/config.example.yaml ~/.config/x/config.yaml
         x doctor
+        
+      For native transport (10x faster writes):
+        https://github.com/dl-alexandre/X-CLI/blob/master/NATIVE_VERIFICATION.md
     EOS
   end
 
