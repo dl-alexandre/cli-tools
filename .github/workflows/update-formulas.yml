@@ -153,10 +153,10 @@ jobs:
           )
           
           # Set output for pr_created flag
-          puts "pr_created=true" >> ENV['GITHUB_OUTPUT']
+          File.open(ENV['GITHUB_OUTPUT'], 'a') { |f| f.puts "pr_created=true" }
           puts "Created PR for #{updated.length} formula(s)"
         else
-          puts "pr_created=false" >> ENV['GITHUB_OUTPUT']
+          File.open(ENV['GITHUB_OUTPUT'], 'a') { |f| f.puts "pr_created=false" }
           puts "All formulas are up to date"
         end
       shell: ruby {0}
