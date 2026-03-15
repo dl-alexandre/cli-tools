@@ -5,21 +5,21 @@
 class Ams < Formula
   desc "Apple Map Server CLI"
   homepage "https://github.com/dl-alexandre/Apple-Map-Server-CLI"
-  version "0.0.10"
+  version "0.0.11"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.10/ams-darwin-amd64.tar.gz"
-      sha256 "f836334e829b0b98f785b1ce6b2d3c13d1b1d4682474f5d881c60c69b897d6f3"
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.11/ams-darwin-amd64.tar.gz"
+      sha256 "8988f95f651f4234720eadb8e41059e2dd12ca09eea88186688c48e4da7da167"
 
       define_method(:install) do
         bin.install "ams"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.10/ams-darwin-arm64.tar.gz"
-      sha256 "2e4fa1764e763e84db25cbf379ae92fab308d171154fef0ba5dd49b508342b95"
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.11/ams-darwin-arm64.tar.gz"
+      sha256 "d8b58b49d4cb7245e1848a973ba0ea507cf3f5ee36c05dac02ac4f23874bcd9f"
 
       define_method(:install) do
         bin.install "ams"
@@ -29,15 +29,15 @@ class Ams < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.10/ams-linux-amd64.tar.gz"
-      sha256 "f5d846b717b150bb1e14b3a240e826a414887b4bd3bc5a4930c070798d9bbffd"
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.11/ams-linux-amd64.tar.gz"
+      sha256 "0343a8b54e5132bfaf7c4d20993b8af0b2995fae294a3920298da0936c43d36c"
       define_method(:install) do
         bin.install "ams"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.10/ams-linux-arm64.tar.gz"
-      sha256 "e18f3fc3b979d75d7ce31851aa5c58903be0fc132414fa8093f9689afe241328"
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.11/ams-linux-arm64.tar.gz"
+      sha256 "03db21c2c4e4a85a4b4d11eaabdbb43519168ceec921ad2c970259118a207e72"
       define_method(:install) do
         bin.install "ams"
       end
