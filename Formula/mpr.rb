@@ -5,21 +5,21 @@
 class Mpr < Formula
   desc "CLI for USDA AMS MyMarketNews Datamart API"
   homepage "https://github.com/dl-alexandre/MyMarketNews-CLI"
-  version "0.0.6"
+  version "0.0.7"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.6/mpr-darwin-amd64.tar.gz"
-      sha256 "84bb21f801bf3389f9db4cfbd1fca1c3a73f563141484498af36b034682da6ea"
+      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.7/mpr-darwin-amd64.tar.gz"
+      sha256 "e97ab04f9644947bca13a2343bea898781f2728680fd0a3e4c74a036ee332461"
 
       define_method(:install) do
         bin.install "mpr"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.6/mpr-darwin-arm64.tar.gz"
-      sha256 "3929800b2de921009b0c47ca215a66f22d6f59360d24196571690b3b2b2aad23"
+      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.7/mpr-darwin-arm64.tar.gz"
+      sha256 "755e668747a642b5a79a009492ddfc401d16eba46e37fdbb249125976b83e87e"
 
       define_method(:install) do
         bin.install "mpr"
@@ -29,15 +29,15 @@ class Mpr < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.6/mpr-linux-amd64.tar.gz"
-      sha256 "6286188fa5e75a59d3efbeead45b25c317ccd8b6f95659414f5e7192fed61888"
+      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.7/mpr-linux-amd64.tar.gz"
+      sha256 "6510d04667be95f3f701a44c41eeb3581dbee8eabb19e9fbda05873ce0633015"
       define_method(:install) do
         bin.install "mpr"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.6/mpr-linux-arm64.tar.gz"
-      sha256 "b3112ab757edaa82bc083921fe504ace857098a796ce57fdd768e70e875feae9"
+      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.7/mpr-linux-arm64.tar.gz"
+      sha256 "236e57e513a1bf275b087bfd7ec664fc8f18cf19100de739205268a10f0e4818"
       define_method(:install) do
         bin.install "mpr"
       end
