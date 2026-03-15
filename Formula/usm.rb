@@ -11,7 +11,7 @@ class Usm < Formula
   on_macos do
     if Hardware::CPU.intel?
       url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v1.1.2/usm-darwin-amd64.tar.gz"
-      sha256 "25b5f5992b424e04306ac11e2d4769684e6c058fd2252b55da70460bc28e082a"
+      sha256 "89861f5d4eb1bb689ad44b682432b6c7df61164e03a0bae3873c4f34280b8963"
 
       define_method(:install) do
         bin.install "usm"
@@ -19,7 +19,7 @@ class Usm < Formula
     end
     if Hardware::CPU.arm?
       url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v1.1.2/usm-darwin-arm64.tar.gz"
-      sha256 "458380a26c68ec47588520b12730a0e9f8ec5da0cd6b3d10e9145cab87c0510b"
+      sha256 "e058e773313ae59a7e863ba408df67c2f8588ca79c376238caa1a02a242875be"
 
       define_method(:install) do
         bin.install "usm"
@@ -30,14 +30,14 @@ class Usm < Formula
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
       url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v1.1.2/usm-linux-amd64.tar.gz"
-      sha256 "e4c88c7932cbfdf4ca2ee96c68868bbde21fa62338f05e2ff564be8c50579977"
+      sha256 "5a0a764c4e9674456e01bd0dd6bfd3099bcbf90b72a0629909924dce62e7a798"
       define_method(:install) do
         bin.install "usm"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
       url "https://github.com/dl-alexandre/UniFi-Site-Manager-CLI/releases/download/v1.1.2/usm-linux-arm64.tar.gz"
-      sha256 "2a5b368196d15a9aac0e390ab68b80c80a82774c9c71935a3d9af2cae008e8c3"
+      sha256 "942b671ed5e84c4015e1f4b3af59fed7b6644a5e92fa0b0fb172b64c1cd6ce4e"
       define_method(:install) do
         bin.install "usm"
       end
