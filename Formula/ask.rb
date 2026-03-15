@@ -1,12 +1,12 @@
 class Ask < Formula
   desc "App Store Kit CLI for in-app purchases and subscriptions"
   homepage "https://github.com/dl-alexandre/App-StoreKit-CLI"
-  version "v0.0.2"
+  version "v0.0.3"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.2/ask-darwin-arm64.tar.gz"
+      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.3/ask-darwin-arm64.tar.gz"
       sha256 "TO_BE_UPDATED"
 
       def install
@@ -14,7 +14,7 @@ class Ask < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.2/ask-darwin-amd64.tar.gz"
+      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.3/ask-darwin-amd64.tar.gz"
       sha256 "TO_BE_UPDATED"
 
       def install
@@ -25,7 +25,7 @@ class Ask < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.2/ask-linux-arm64.tar.gz"
+      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.3/ask-linux-arm64.tar.gz"
       sha256 "TO_BE_UPDATED"
 
       def install
@@ -33,7 +33,7 @@ class Ask < Formula
       end
     end
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.2/ask-linux-amd64.tar.gz"
+      url "https://github.com/dl-alexandre/App-StoreKit-CLI/releases/download/v0.0.3/ask-linux-amd64.tar.gz"
       sha256 "TO_BE_UPDATED"
 
       def install

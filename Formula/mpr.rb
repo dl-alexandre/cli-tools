@@ -6,23 +6,23 @@ class Mpr < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.1/mpr-darwin-arm64.tar.gz"
-      sha256 "59beba9d03c540590f668fe0badbf2e30e542256a1618fa4a4b8f0866b4e6501"
+      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.2/mpr-darwin-arm64.tar.gz"
+      sha256 "TO_BE_UPDATED"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.1/mpr-darwin-amd64.tar.gz"
-      sha256 "62d2db8fd3e6a953defdb05d9ad8c535674629d10fcd6a1de218077788212635"
+      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.2/mpr-darwin-amd64.tar.gz"
+      sha256 "TO_BE_UPDATED"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.1/mpr-linux-arm64.tar.gz"
-      sha256 "13dae260a2b13dbe75087d65a5292a2f551db56283c2cc157ffc5f37190ed33a"
+      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.2/mpr-linux-arm64.tar.gz"
+      sha256 "TO_BE_UPDATED"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.1/mpr-linux-amd64.tar.gz"
-      sha256 "4f58e116ab20b8e690eff562616813a2500086070b52bcd08bc9eb17068ac91c"
+      url "https://github.com/dl-alexandre/MyMarketNews-CLI/releases/download/v0.0.2/mpr-linux-amd64.tar.gz"
+      sha256 "TO_BE_UPDATED"
     end
   end
 

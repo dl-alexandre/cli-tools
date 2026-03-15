@@ -6,7 +6,7 @@ class Ams < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.7/ams-darwin-arm64.tar.gz"
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.2/ams-darwin-arm64.tar.gz"
       sha256 "TO_BE_UPDATED"
 
       def install
@@ -14,7 +14,7 @@ class Ams < Formula
       end
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.7/ams-darwin-amd64.tar.gz"
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.2/ams-darwin-amd64.tar.gz"
       sha256 "TO_BE_UPDATED"
 
       def install
@@ -25,7 +25,7 @@ class Ams < Formula
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.7/ams-linux-arm64.tar.gz"
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.2/ams-linux-arm64.tar.gz"
       sha256 "TO_BE_UPDATED"
 
       def install
@@ -33,7 +33,7 @@ class Ams < Formula
       end
     end
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.7/ams-linux-amd64.tar.gz"
+      url "https://github.com/dl-alexandre/Apple-Map-Server-CLI/releases/download/v0.0.2/ams-linux-amd64.tar.gz"
       sha256 "TO_BE_UPDATED"
 
       def install
