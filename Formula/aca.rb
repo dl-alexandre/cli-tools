@@ -5,21 +5,21 @@
 class Aca < Formula
   desc "Advanced Commerce API CLI"
   homepage "https://github.com/dl-alexandre/Advance-Commerce-CLI"
-  version "0.0.3"
+  version "0.0.4"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Advance-Commerce-CLI/releases/download/v0.0.3/aca_0.0.3_darwin_x86_64.tar.gz"
-      sha256 "3e23ae638bfa8c49061d0b1e70398ea11f2b449c63b302fc774ec5859aa53c5a"
+      url "https://github.com/dl-alexandre/Advance-Commerce-CLI/releases/download/v0.0.4/aca_0.0.4_darwin_x86_64.tar.gz"
+      sha256 "9ad01aee5e35b3b73c917f891c234bc34b2bee09f135e830379f4a03cdf3a9f5"
 
       define_method(:install) do
         bin.install "aca"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Advance-Commerce-CLI/releases/download/v0.0.3/aca_0.0.3_darwin_arm64.tar.gz"
-      sha256 "b697fa0d8329966588e4a7d385e242a935250f413828d61e352ad828209908a1"
+      url "https://github.com/dl-alexandre/Advance-Commerce-CLI/releases/download/v0.0.4/aca_0.0.4_darwin_arm64.tar.gz"
+      sha256 "656561bc93823f4f0df75a77e89ea90a7325c4dfdcb4932c17dd80297eb4c362"
 
       define_method(:install) do
         bin.install "aca"
@@ -29,15 +29,15 @@ class Aca < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Advance-Commerce-CLI/releases/download/v0.0.3/aca_0.0.3_linux_x86_64.tar.gz"
-      sha256 "4c6a49ce71facdf89549bd5231a3225dd11964e6f99877edb60683b370abd179"
+      url "https://github.com/dl-alexandre/Advance-Commerce-CLI/releases/download/v0.0.4/aca_0.0.4_linux_x86_64.tar.gz"
+      sha256 "423a03baa21cef18693e2f908e09e5fe4f3c31a7b8335d71322f0d51f8187c3f"
       define_method(:install) do
         bin.install "aca"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Advance-Commerce-CLI/releases/download/v0.0.3/aca_0.0.3_linux_arm64.tar.gz"
-      sha256 "2ff1a0e2178ce9bd7bf92597808e689f9cb1ab3839d0b12faa5fd4e236671e5f"
+      url "https://github.com/dl-alexandre/Advance-Commerce-CLI/releases/download/v0.0.4/aca_0.0.4_linux_arm64.tar.gz"
+      sha256 "c52f26eb7ceb18936e75c4980d24d2b2286587367ee6bffd2bc336f0d7792af9"
       define_method(:install) do
         bin.install "aca"
       end
