@@ -5,21 +5,21 @@
 class Grokipedia < Formula
   desc "Grokipedia CLI - command-line interface for the Grokipedia API"
   homepage "https://github.com/dl-alexandre/Grokipedia-CLI"
-  version "0.0.3"
+  version "0.0.4"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Grokipedia-CLI/releases/download/v0.0.3/grokipedia_0.0.3_darwin_x86_64.tar.gz"
-      sha256 "556b5c42d016cd16c27cbf2e9af9a0d3202148fe1d47db566e4aea851818cfa8"
+      url "https://github.com/dl-alexandre/Grokipedia-CLI/releases/download/v0.0.4/grokipedia_0.0.4_darwin_x86_64.tar.gz"
+      sha256 "99701a54c292bc03f76da91a405d4a77c335ad4d569a1b1e1a80b09ad99e8447"
 
       define_method(:install) do
         bin.install "grokipedia"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Grokipedia-CLI/releases/download/v0.0.3/grokipedia_0.0.3_darwin_arm64.tar.gz"
-      sha256 "d811413ba1daf7ac53e35c4aaad3cff3372da8cac3e9bc2c02f11fdd1c565238"
+      url "https://github.com/dl-alexandre/Grokipedia-CLI/releases/download/v0.0.4/grokipedia_0.0.4_darwin_arm64.tar.gz"
+      sha256 "2c2fd4864f296c1fc31f141ef86f6306b7fb4079a55d45d77264a5cd87f6fe97"
 
       define_method(:install) do
         bin.install "grokipedia"
@@ -29,15 +29,15 @@ class Grokipedia < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Grokipedia-CLI/releases/download/v0.0.3/grokipedia_0.0.3_linux_x86_64.tar.gz"
-      sha256 "c8b68ef3e0afaf9e460d52ad3700b684f151388e15b91091366e18c757860333"
+      url "https://github.com/dl-alexandre/Grokipedia-CLI/releases/download/v0.0.4/grokipedia_0.0.4_linux_x86_64.tar.gz"
+      sha256 "f64c3b11a0b20e2e2ad56087e850249f8188542955556f6ae5503a1751bd0cb7"
       define_method(:install) do
         bin.install "grokipedia"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Grokipedia-CLI/releases/download/v0.0.3/grokipedia_0.0.3_linux_arm64.tar.gz"
-      sha256 "f58766ba6af591f530c29a9511960eef87c28a647cbf9f5e870d9c76a45f448b"
+      url "https://github.com/dl-alexandre/Grokipedia-CLI/releases/download/v0.0.4/grokipedia_0.0.4_linux_arm64.tar.gz"
+      sha256 "4fb981dc1ed649cc20011a9794586655f84ebd7211f9f82e7c81434f609bd32f"
       define_method(:install) do
         bin.install "grokipedia"
       end
