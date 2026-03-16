@@ -5,21 +5,21 @@
 class Gdrv < Formula
   desc "Fast, lightweight CLI for Google Drive"
   homepage "https://github.com/dl-alexandre/Google-Drive-CLI"
-  version "0.6.2"
+  version "0.6.3"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.2/gdrv-darwin-amd64.tar.gz"
-      sha256 "9a21d10bf1d3b2f48b1a98df916fd4db33f85be0ee79b5c0a1f3691b5d9735ce"
+      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.3/gdrv-darwin-amd64.tar.gz"
+      sha256 "6ab65c67449e27909997d3bad6b9713a3e67b5568027e34daeb185df8b4bc76f"
 
       define_method(:install) do
         bin.install "gdrv"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.2/gdrv-darwin-arm64.tar.gz"
-      sha256 "b913ce6421e0041481313c0c772070dca96926ff192ceaadbb142ddccf8e34a8"
+      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.3/gdrv-darwin-arm64.tar.gz"
+      sha256 "7964d0be70ccb9e65d865552e81da16ede33c59e1d4bf2717139af5e9326ac2f"
 
       define_method(:install) do
         bin.install "gdrv"
@@ -29,15 +29,15 @@ class Gdrv < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.2/gdrv-linux-amd64.tar.gz"
-      sha256 "8fdc8a8887545ae477796e7fcbe8095f09d16eb7de4ea8a69ca873d996d2ef34"
+      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.3/gdrv-linux-amd64.tar.gz"
+      sha256 "7dd19d697e29452e2b7cefa7639263b9cb0c243868cb28f97e4e3ed58e3a625d"
       define_method(:install) do
         bin.install "gdrv"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.2/gdrv-linux-arm64.tar.gz"
-      sha256 "3eae3af36927351da6607c8b37e7d5c0851b85932776c66c831541def6c9a3ed"
+      url "https://github.com/dl-alexandre/Google-Drive-CLI/releases/download/v0.6.3/gdrv-linux-arm64.tar.gz"
+      sha256 "c4c31010cb78f0279e969c394723a7a8654e5523c3d6a6d1217516f40a51e3cd"
       define_method(:install) do
         bin.install "gdrv"
       end
