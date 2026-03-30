@@ -15,9 +15,9 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 
 | Repository | Used By | Current Version | Latest Version | Status | Notes |
 |------------|---------|-----------------|----------------|--------|-------|
-| ⭐ [alecthomas/kong](https://github.com/alecthomas/kong) | 10 projects | v1.10.0-v1.14.0 | v1.14.0 | ✅ | Primary CLI framework |
-| [spf13/cobra](https://github.com/spf13/cobra) | 4 projects | v1.8.0-v1.9.0 | v1.9.0 | ✅ | Alternative CLI (legacy projects) |
-| ⭐ [spf13/viper](https://github.com/spf13/viper) | 8 projects | v1.19.0 | v1.19.0 | ✅ | Configuration management |
+| ⭐ [alecthomas/kong](https://github.com/alecthomas/kong) | 10 projects | v1.14.0 | v1.14.0 | ✅ | Primary CLI framework - all projects updated 2026-03-30 |
+| [spf13/cobra](https://github.com/spf13/cobra) | 4 projects | v1.9.0 | v1.9.0 | ✅ | Alternative CLI (legacy projects) |
+| ⭐ [spf13/viper](https://github.com/spf13/viper) | 8 projects | v1.21.0 | v1.21.0 | ✅ | Configuration management - all projects updated 2026-03-30 |
 
 ### Security & Authentication
 
@@ -33,7 +33,7 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 | Repository | Used By | Current Version | Latest Version | Status | Notes |
 |------------|---------|-----------------|----------------|--------|-------|
 | ⭐ [go-resty/resty](https://github.com/go-resty/resty) | 6 projects | v2.17.2 | v2.17.2 | ✅ | Primary HTTP client |
-| ⭐ [chromedp/chromedp](https://github.com/chromedp/chromedp) | 1 project | v0.14.2 | v0.16.1 | ⚠️ | Browser automation for OAuth - needs update |
+| ⭐ [chromedp/chromedp](https://github.com/chromedp/chromedp) | 1 project | v0.16.1 | v0.16.1 | ✅ | Browser automation for OAuth - updated 2026-03-30 |
 | [chromedp/cdproto](https://github.com/chromedp/cdproto) | 1 project | v0.0.0-20250803... | Latest | 🔍 | Auto-updates with chromedp |
 
 ### Output & Formatting
