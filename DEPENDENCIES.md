@@ -15,9 +15,9 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 
 | Repository | Used By | Current Version | Latest Version | Status | Notes |
 |------------|---------|-----------------|----------------|--------|-------|
-| ⭐ [alecthomas/kong](https://github.com/alecthomas/kong) | 10 projects | v1.14.0 | v1.14.0 | ✅ | Primary CLI framework - all projects updated 2026-03-30 |
+| ⭐ [alecthomas/kong](https://github.com/alecthomas/kong) | 10 projects | v1.10.0-v1.14.0 | v1.14.0 | ⚠️ | Local-UniFi-CLI on v1.10.0 (update requires go mod tidy) |
 | [spf13/cobra](https://github.com/spf13/cobra) | 4 projects | v1.9.0 | v1.9.0 | ✅ | Alternative CLI (legacy projects) |
-| ⭐ [spf13/viper](https://github.com/spf13/viper) | 8 projects | v1.21.0 | v1.21.0 | ✅ | Configuration management - all projects updated 2026-03-30 |
+| ⭐ [spf13/viper](https://github.com/spf13/viper) | 8 projects | v1.19.0-v1.21.0 | v1.21.0 | ⚠️ | X-CLI on v1.19.0, Local-UniFi-CLI on v1.20.1 (updates require go mod tidy) |
 
 ### Security & Authentication
 
@@ -123,6 +123,10 @@ After audit, star these high-impact repos:
 
 ## Changelog
 
+- **2026-03-30** - Attempted kong and viper updates but reverted:
+  - Local-UniFi-CLI: kong v1.10.0 → v1.14.0 and viper v1.20.1 → v1.21.0 (reverted due to missing go.sum entries)
+  - X-CLI: viper v1.19.0 → v1.21.0 (reverted due to missing go.sum entries)
+  - These updates require `go mod tidy` which needs Go installed locally
 - **2026-03-30** - Completed action items 1 & 2:
   - Updated chromedp v0.14.2 → v0.16.1 (X-CLI)
   - Updated rodaine/table v1.3.0 → v1.3.1 (Apple-Business-Connect-CLI, Grokipedia-CLI)
