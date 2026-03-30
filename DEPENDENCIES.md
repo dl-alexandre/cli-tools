@@ -26,7 +26,7 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 | ⭐ [zalando/go-keyring](https://github.com/zalando/go-keyring) | 3 projects | v0.2.5 | v0.2.5 | ✅ | Secure credential storage (X-CLI, etc.) |
 | [99designs/keyring](https://github.com/99designs/keyring) | 1 project | v1.2.2 | v1.2.2 | 🔍 | Alternative keyring - consolidate with zalando? |
 | [golang-jwt/jwt](https://github.com/golang-jwt/jwt) | 2 projects | v5.2.1-v5.3.1 | v5.3.1 | ✅ | JWT handling for App Store APIs |
-| [refraction-networking/utls](https://github.com/refraction-networking/utls) | 1 project | v1.3.3 | v1.6.1 | ⚠️ | TLS fingerprinting - check if needed |
+| [refraction-networking/utls](https://github.com/refraction-networking/utls) | 1 project | v1.3.3 | v1.6.1 | ✅ | **REQUIRED**: TLS fingerprinting to evade X API bot detection (utls.HelloChrome_Auto) |
 
 ### HTTP Clients & Browser Automation
 
@@ -44,8 +44,8 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 | [mattn/go-isatty](https://github.com/mattn/go-isatty) | 7 projects | v0.0.20 | v0.0.20 | ✅ | Terminal detection |
 | [olekukonko/tablewriter](https://github.com/olekukonko/tablewriter) | 2 projects | - | Latest | 🔍 | Alternative table lib - consolidate to rodaine? |
 | ⭐ [charmbracelet/lipgloss](https://github.com/charmbracelet/lipgloss) | 1 project | v1.1.0 | v1.1.0 | ✅ | Terminal styling (Grokipedia) |
-| [charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea) | 0 projects | - | Latest | 🗑️ | Listed but unused? Verify |
-| [jedib0t/go-pretty](https://github.com/jedib0t/go-pretty) | 1 project | v6.6.5 | v6.6.7 | ⚠️ | Pretty printing (UPS-CLI) |
+| [charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea) | 0 projects | - | Latest | ✅ | **NOT USED** - Documented for potential future use |
+| [jedib0t/go-pretty](https://github.com/jedib0t/go-pretty) | 1 project | v6.7.8 | v6.7.8 | ✅ | Pretty printing (App-StoreKit-CLI) - corrected version |
 | [schollz/progressbar](https://github.com/schollz/progressbar) | 2 projects | v3.18.0 | v3.18.0 | ✅ | Progress bars |
 
 ### Data Processing
