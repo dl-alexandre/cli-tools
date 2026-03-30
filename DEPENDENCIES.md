@@ -40,7 +40,7 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 
 | Repository | Used By | Current Version | Latest Version | Status | Notes |
 |------------|---------|-----------------|----------------|--------|-------|
-| [rodaine/table](https://github.com/rodaine/table) | 7 projects | v1.3.0 | v1.3.1 | ⚠️ | Table formatting - minor update available |
+| [rodaine/table](https://github.com/rodaine/table) | 7 projects | v1.3.1 | v1.3.1 | ✅ | Table formatting - all projects updated 2026-03-30 |
 | [mattn/go-isatty](https://github.com/mattn/go-isatty) | 7 projects | v0.0.20 | v0.0.20 | ✅ | Terminal detection |
 | [olekukonko/tablewriter](https://github.com/olekukonko/tablewriter) | 2 projects | - | Latest | 🔍 | Alternative table lib - consolidate to rodaine? |
 | ⭐ [charmbracelet/lipgloss](https://github.com/charmbracelet/lipgloss) | 1 project | v1.1.0 | v1.1.0 | ✅ | Terminal styling (Grokipedia) |
