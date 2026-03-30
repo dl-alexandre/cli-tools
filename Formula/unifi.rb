@@ -6,31 +6,28 @@ class Unifi < Formula
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.0.3/unifi-darwin-arm64"
-      sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
+      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.0.8/unifi-darwin-arm64.tar.gz"
+      sha256 "acf8689a4dca1adc935137e4e06e984a05e1ea367f46d1ae774debe81c72c984"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.0.3/unifi-darwin-amd64"
-      sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
+      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.0.8/unifi-darwin-amd64.tar.gz"
+      sha256 "3ef58cf8ffe68e5e88c918aeac5d7074bab0fc1fa8ae955c360b514df2886ec5"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.0.3/unifi-linux-arm64"
-      sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
+      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.0.8/unifi-linux-arm64.tar.gz"
+      sha256 "a7d804522a50d2ec679f2770ed806e39c82f16d31f16bba2316d8369abc38dfb"
     end
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.0.3/unifi-linux-amd64"
-      sha256 "0019dfc4b32d63c1392aa264aed2253c1e0c2fb09216f8e2cc269bbfb8bb49b5"
+      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.0.8/unifi-linux-amd64.tar.gz"
+      sha256 "0ec5b1d69cc005fae381c34b84bacb16962deaf3a306717a263d03ac86c0842e"
     end
   end
 
   def install
-    bin.install "unifi-darwin-arm64" => "unifi" if OS.mac? && Hardware::CPU.arm?
-    bin.install "unifi-darwin-amd64" => "unifi" if OS.mac? && Hardware::CPU.intel?
-    bin.install "unifi-linux-arm64" => "unifi" if OS.linux? && Hardware::CPU.arm?
-    bin.install "unifi-linux-amd64" => "unifi" if OS.linux? && Hardware::CPU.intel?
+    bin.install "unifi" => "unifi"
   end
 
   test do
