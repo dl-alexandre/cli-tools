@@ -93,9 +93,24 @@ These are pulled in automatically by direct dependencies. No need to star unless
 2. **Update rodaine/table** - v1.3.0 → v1.3.1 (safe update)
 3. **Review utls** - Do we still need TLS fingerprinting?
 
-### Consolidation Candidates
-- Consider standardizing on one table library (rodaine vs olekukonko vs go-pretty)
-- Consider standardizing on one keyring library (zalando vs 99designs)
+### Consolidation Candidates (Deferred)
+After review, we decided **NOT** to consolidate these libraries:
+
+**Table Libraries (rodaine vs olekukonko vs go-pretty)**
+- **Decision:** Keep all three
+- **Rationale:** 
+  - Different feature sets: rodaine (auto-width, colors - our primary), olekukonko (Markdown/CSV export - legacy projects), go-pretty (complex formatting - UPS-CLI)
+  - Migration cost across 9 projects outweighs benefits
+  - All libraries are stable/maintenance mode with no security concerns
+  - "If it ain't broke, don't fix it" - working code is better than "clean" code
+
+**Keyring Libraries (zalando vs 99designs)**
+- **Decision:** Keep both
+- **Rationale:**
+  - 99designs supports more backends (Windows WSL, specific keychains) that zalando doesn't
+  - Only 1 of 14 projects uses 99designs (Apple-Business-Connect-CLI)
+  - Low impact, works fine, no security issues
+  - Risk of breakage during migration exceeds benefit of standardization
 
 ### For Starring
 After audit, star these high-impact repos:
@@ -108,6 +123,10 @@ After audit, star these high-impact repos:
 
 ## Changelog
 
+- **2026-03-30** - Completed action items 1 & 2:
+  - Updated chromedp v0.14.2 → v0.16.1 (X-CLI)
+  - Updated rodaine/table v1.3.0 → v1.3.1 (Apple-Business-Connect-CLI, Grokipedia-CLI)
+- **2026-03-30** - Starred 6 high-impact dependencies after audit
 - **2026-03-30** - Initial dependency audit document created
 - Next review: 2026-06-30 (quarterly)
 
