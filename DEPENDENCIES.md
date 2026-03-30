@@ -15,15 +15,15 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 
 | Repository | Used By | Current Version | Latest Version | Status | Notes |
 |------------|---------|-----------------|----------------|--------|-------|
-| [alecthomas/kong](https://github.com/alecthomas/kong) | 10 projects | v1.10.0-v1.14.0 | v1.14.0 | ✅ | Primary CLI framework |
+| ⭐ [alecthomas/kong](https://github.com/alecthomas/kong) | 10 projects | v1.10.0-v1.14.0 | v1.14.0 | ✅ | Primary CLI framework |
 | [spf13/cobra](https://github.com/spf13/cobra) | 4 projects | v1.8.0-v1.9.0 | v1.9.0 | ✅ | Alternative CLI (legacy projects) |
-| [spf13/viper](https://github.com/spf13/viper) | 8 projects | v1.19.0 | v1.19.0 | ✅ | Configuration management |
+| ⭐ [spf13/viper](https://github.com/spf13/viper) | 8 projects | v1.19.0 | v1.19.0 | ✅ | Configuration management |
 
 ### Security & Authentication
 
 | Repository | Used By | Current Version | Latest Version | Status | Notes |
 |------------|---------|-----------------|----------------|--------|-------|
-| [zalando/go-keyring](https://github.com/zalando/go-keyring) | 3 projects | v0.2.5 | v0.2.5 | ✅ | Secure credential storage (X-CLI, etc.) |
+| ⭐ [zalando/go-keyring](https://github.com/zalando/go-keyring) | 3 projects | v0.2.5 | v0.2.5 | ✅ | Secure credential storage (X-CLI, etc.) |
 | [99designs/keyring](https://github.com/99designs/keyring) | 1 project | v1.2.2 | v1.2.2 | 🔍 | Alternative keyring - consolidate with zalando? |
 | [golang-jwt/jwt](https://github.com/golang-jwt/jwt) | 2 projects | v5.2.1-v5.3.1 | v5.3.1 | ✅ | JWT handling for App Store APIs |
 | [refraction-networking/utls](https://github.com/refraction-networking/utls) | 1 project | v1.3.3 | v1.6.1 | ⚠️ | TLS fingerprinting - check if needed |
@@ -32,8 +32,8 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 
 | Repository | Used By | Current Version | Latest Version | Status | Notes |
 |------------|---------|-----------------|----------------|--------|-------|
-| [go-resty/resty](https://github.com/go-resty/resty) | 6 projects | v2.17.2 | v2.17.2 | ✅ | Primary HTTP client |
-| [chromedp/chromedp](https://github.com/chromedp/chromedp) | 1 project | v0.14.2 | v0.16.1 | ⚠️ | Browser automation for OAuth - needs update |
+| ⭐ [go-resty/resty](https://github.com/go-resty/resty) | 6 projects | v2.17.2 | v2.17.2 | ✅ | Primary HTTP client |
+| ⭐ [chromedp/chromedp](https://github.com/chromedp/chromedp) | 1 project | v0.14.2 | v0.16.1 | ⚠️ | Browser automation for OAuth - needs update |
 | [chromedp/cdproto](https://github.com/chromedp/cdproto) | 1 project | v0.0.0-20250803... | Latest | 🔍 | Auto-updates with chromedp |
 
 ### Output & Formatting
@@ -43,7 +43,7 @@ This document tracks all external Go dependencies used across the CLI-Tools mono
 | [rodaine/table](https://github.com/rodaine/table) | 7 projects | v1.3.0 | v1.3.1 | ⚠️ | Table formatting - minor update available |
 | [mattn/go-isatty](https://github.com/mattn/go-isatty) | 7 projects | v0.0.20 | v0.0.20 | ✅ | Terminal detection |
 | [olekukonko/tablewriter](https://github.com/olekukonko/tablewriter) | 2 projects | - | Latest | 🔍 | Alternative table lib - consolidate to rodaine? |
-| [charmbracelet/lipgloss](https://github.com/charmbracelet/lipgloss) | 1 project | v1.1.0 | v1.1.0 | ✅ | Terminal styling (Grokipedia) |
+| ⭐ [charmbracelet/lipgloss](https://github.com/charmbracelet/lipgloss) | 1 project | v1.1.0 | v1.1.0 | ✅ | Terminal styling (Grokipedia) |
 | [charmbracelet/bubbletea](https://github.com/charmbracelet/bubbletea) | 0 projects | - | Latest | 🗑️ | Listed but unused? Verify |
 | [jedib0t/go-pretty](https://github.com/jedib0t/go-pretty) | 1 project | v6.6.5 | v6.6.7 | ⚠️ | Pretty printing (UPS-CLI) |
 | [schollz/progressbar](https://github.com/schollz/progressbar) | 2 projects | v3.18.0 | v3.18.0 | ✅ | Progress bars |
