@@ -5,21 +5,21 @@
 class Unifi < Formula
   desc "CLI for local UniFi controller management"
   homepage "https://github.com/dl-alexandre/Local-UniFi-CLI"
-  version "0.1.0"
+  version "0.1.1"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.1.0/unifi-darwin-amd64.tar.gz"
-      sha256 "76dc122b90c8ce3241fc434d43b42ae1dc4ead2111339af3478e7a31866988a5"
+      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.1.1/unifi-darwin-amd64.tar.gz"
+      sha256 "6d09de02359743b09cee0dbab3c03eca1f138b7c15e38c1282acfbdc46c97603"
 
       define_method(:install) do
         bin.install "unifi"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.1.0/unifi-darwin-arm64.tar.gz"
-      sha256 "d8285ae1039d87bb26c2cf29167041e7748f757c9dce26b1dcaba94118583f6b"
+      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.1.1/unifi-darwin-arm64.tar.gz"
+      sha256 "90f3b927a7dac2b5c5ea5c0cc4fdbd265910bc34046a10a5a643391989219cf6"
 
       define_method(:install) do
         bin.install "unifi"
@@ -29,15 +29,15 @@ class Unifi < Formula
 
   on_linux do
     if Hardware::CPU.intel? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.1.0/unifi-linux-amd64.tar.gz"
-      sha256 "79e5581bc34bf83ac4d030f7955315f788d08f61eba998e01e36889c1c1c3025"
+      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.1.1/unifi-linux-amd64.tar.gz"
+      sha256 "0873db5d4d256816d138b4d19feb2113233c9a2a05c75ed169fe09f537343225"
       define_method(:install) do
         bin.install "unifi"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.1.0/unifi-linux-arm64.tar.gz"
-      sha256 "358c2129404a4e26ed8b365c9136a064aecef36fd18c43e9abf2bb434a86822c"
+      url "https://github.com/dl-alexandre/Local-UniFi-CLI/releases/download/v0.1.1/unifi-linux-arm64.tar.gz"
+      sha256 "8e4c6da8e967d6cc2c4a511afdeef461617e9a17ed86c6bd02713b6f83782246"
       define_method(:install) do
         bin.install "unifi"
       end
