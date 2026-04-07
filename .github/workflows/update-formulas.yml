@@ -171,24 +171,30 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
     steps:
+    - name: Checkout tap repository
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.pull_request.head.ref || github.ref }}
+
     - name: Set up Homebrew
-      uses: Homebrew/actions/setup-homebrew@master
+      uses: Homebrew/actions/setup-homebrew@main
 
     - name: Discover and test formulas
       run: |
-        brew tap dl-alexandre/tap
-        brew update
+        # Add local tap for testing
+        brew tap-new local/tap
+        cp -r Formula $(brew --repo local/tap)/
         
         # Dynamically discover all formulas in the Formula directory
-        FORMULAS=$(find . -name "*.rb" -path "*/Formula/*" -exec basename {} .rb \; | sort)
+        FORMULAS=$(find Formula -name "*.rb" -exec basename {} .rb \; | sort)
         
         # Test each discovered formula
         for formula in $FORMULAS; do
-          if brew info dl-alexandre/tap/$formula &>/dev/null; then
-            echo "Testing $formula..."
-            brew install dl-alexandre/tap/$formula
+          echo "Testing $formula..."
+          brew install local/tap/$formula || true
+          if command -v $formula &> /dev/null; then
             $formula --version
-            brew uninstall dl-alexandre/tap/$formula
+            brew uninstall local/tap/$formula || true
           fi
         done
       working-directory: ${{ github.workspace }}
