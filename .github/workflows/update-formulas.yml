@@ -179,6 +179,11 @@ jobs:
     - name: Set up Homebrew
       uses: Homebrew/actions/setup-homebrew@main
 
+    - name: Configure git
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+
     - name: Discover and test formulas
       run: |
         # Add local tap for testing
