@@ -1,0 +1,110 @@
+name: Cleanup Stale Branches
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+  
+  # Run weekly on Sundays at 06:00 UTC
+  schedule:
+    - cron: '0 6 * * 0'
+
+jobs:
+  cleanup-homebrew-tap:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Delete stale update-formulas branches
+      env:
+        GITHUB_TOKEN: ${{ secrets.TAP_TOKEN }}
+      run: |
+        echo "Fetching branches..."
+        branches=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          "https://api.github.com/repos/${{ github.repository }}/branches?per_page=100" | \
+          jq -r '.[] | select(.name | startswith("update-formulas-")) | .name')
+
+        deleted=0
+        kept=0
+
+        for branch in $branches; do
+          # Check if there's an open PR for this branch
+          prs=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls?head=${{ github.repository_owner }}:$branch&state=open")
+          
+          pr_count=$(echo "$prs" | jq 'length')
+
+          if [ "$pr_count" -eq 0 ]; then
+            echo "Deleting stale branch: $branch"
+            curl -s -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/${{ github.repository }}/git/refs/heads/$branch" || true
+            deleted=$((deleted + 1))
+          else
+            echo "Keeping branch with open PR: $branch"
+            kept=$((kept + 1))
+          fi
+        done
+
+        echo ""
+        echo "Cleanup complete: $deleted deleted, $kept kept"
+
+  cleanup-tool-repos:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo:
+          - dl-alexandre/cimis-cli
+          - dl-alexandre/Apple-Map-Server-CLI
+          - dl-alexandre/Google-Drive-CLI
+          - dl-alexandre/Apple-Business-Connect-CLI
+          - dl-alexandre/App-StoreKit-CLI
+          - dl-alexandre/cli-template
+          - dl-alexandre/Grokipedia-CLI
+          - dl-alexandre/MyMarketNews-CLI
+          - dl-alexandre/UniFi-Site-Manager-CLI
+          - dl-alexandre/Local-UniFi-CLI
+          - dl-alexandre/Google-Play-Developer-CLI
+          - dl-alexandre/UPS-CLI
+          - dl-alexandre/X-CLI
+    steps:
+    - name: Cleanup stale branches in ${{ matrix.repo }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.TAP_TOKEN }}
+      run: |
+        echo "Checking ${{ matrix.repo }}..."
+        
+        # Get all branches
+        branches=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          "https://api.github.com/repos/${{ matrix.repo }}/branches?per_page=100" | \
+          jq -r '.[].name')
+
+        for branch in $branches; do
+          # Skip protected/default branches
+          if [ "$branch" = "master" ] || [ "$branch" = "main" ]; then
+            continue
+          fi
+
+          # Check if there's an open PR for this branch
+          prs=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ matrix.repo }}/pulls?head=${{ github.repository_owner }}:$branch&state=open")
+          
+          pr_count=$(echo "$prs" | jq 'length')
+
+          # Check branch age (older than 30 days)
+          commit_date=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+            "https://api.github.com/repos/${{ matrix.repo }}/branches/$branch" | \
+            jq -r '.commit.commit.committer.date')
+          
+          if [ "$commit_date" = "null" ] || [ -z "$commit_date" ]; then
+            continue
+          fi
+
+          commit_timestamp=$(date -d "$commit_date" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$commit_date" +%s 2>/dev/null)
+          current_timestamp=$(date +%s)
+          age_days=$(( (current_timestamp - commit_timestamp) / 86400 ))
+
+          if [ "$pr_count" -eq 0 ] && [ "$age_days" -gt 30 ]; then
+            echo "Deleting stale branch: $branch (${age_days} days old)"
+            curl -s -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
+              "https://api.github.com/repos/${{ matrix.repo }}/git/refs/heads/$branch" || true
+          fi
+        done
+
+        echo "Done checking ${{ matrix.repo }}"
