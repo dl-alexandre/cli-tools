@@ -1,6 +1,0 @@
-[submodule "homebrew-tap"]
-	path = homebrew-tap
-	url = https://github.com/dl-alexandre/homebrew-tap.git
-[submodule "Skills"]
-	path = Skills
-	url = https://github.com/dl-alexandre/Skills.git
