@@ -1,47 +1,266 @@
-# Homebrew Tap
+# cli-tools
 
-Automated Homebrew tap for dl-alexandre CLI tools. This repository automatically updates formulas when new releases are published.
+[![CI](https://github.com/dl-alexandre/cli-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/dl-alexandre/cli-tools/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dl-alexandre/cli-tools)](https://goreportcard.com/report/github.com/dl-alexandre/cli-tools)
+[![GoDoc](https://godoc.org/github.com/dl-alexandre/cli-tools?status.svg)](https://godoc.org/github.com/dl-alexandre/cli-tools)
 
-## Available Formulas
+A Go library providing common functionality for CLI applications. Reduce boilerplate code and ensure consistent behavior across your CLI tools.
 
-| Formula | Description |
-|---------|-------------|
-| [`abc`](https://github.com/dl-alexandre/Apple-Business-Connect-CLI) | Apple Business Connect CLI |
-| [`ams`](https://github.com/dl-alexandre/Apple-Map-Server-CLI) | Apple Map Server CLI |
-| [`ask`](https://github.com/dl-alexandre/App-StoreKit-CLI) | App StoreKit CLI |
-| [`cimis`](https://github.com/dl-alexandre/cimis-cli) | California Irrigation Management CLI |
-| [`cli-template`](https://github.com/dl-alexandre/cli-template) | Go CLI Template (example/template CLI) |
-| [`gdrv`](https://github.com/dl-alexandre/Google-Drive-CLI) | Google Drive CLI |
-| [`gpd`](https://github.com/dl-alexandre/Google-Play-Developer-CLI) | Google Play Developer CLI |
-| [`mpr`](https://github.com/dl-alexandre/MyMarketNews-CLI) | USDA MyMarketNews CLI |
-| [`unifi`](https://github.com/dl-alexandre/Local-UniFi-CLI) | Local UniFi Controller CLI |
-| [`usm`](https://github.com/dl-alexandre/UniFi-Site-Manager-CLI) | UniFi Site Manager CLI |
+## Features
 
-## Install
+- **Version Management** - Semantic versioning, build-time variables, version comparison
+- **Update Checking** - Automatic GitHub release checking with caching
+- **Output Formatting** - Table and JSON output, color detection, message helpers
+- **Configuration** - Viper-based config with environment variable support
+- **CLI Framework Helpers** - Extensions for the Kong CLI framework
+
+## Installation
 
 ```bash
-brew tap dl-alexandre/tap
-brew install <formula>
+go get github.com/dl-alexandre/cli-tools
 ```
 
-See each formula's repository for usage documentation.
+## Quick Start
 
-## Automation
+```go
+package main
 
-This tap uses a Ruby-based GitHub Actions workflow to:
-- Check for new releases daily at 00:00 UTC
-- Calculate SHA256 hashes for all platform binaries
-- Create Pull Requests with updated formulas
-- Test formulas on both macOS and Linux before merging
+import (
+    "fmt"
+    "github.com/dl-alexandre/cli-tools/version"
+)
+
+func main() {
+    fmt.Println(version.String())
+}
+```
+
+Build with version info:
+```bash
+go build -ldflags "-X github.com/dl-alexandre/cli-tools/version.Version=v1.0.0"
+```
+
+## Modules
+
+### `version`
+Build-time version management including:
+- Semantic version handling
+- Version comparison
+- Development build detection
+- Formatted version string output
+
+### `update`
+GitHub release update checking:
+- Automatic update detection
+- 24-hour caching
+- CI environment detection (skips in CI)
+- Standardized update notification format
+
+### `output`
+Output formatting utilities:
+- Table formatting with `rodaine/table`
+- JSON output formatting
+- Color/auto-detection with `go-isatty`
+- Common message helpers (success, error, warning)
+- Banner printing
+
+### `config`
+Configuration management:
+- Viper-based configuration
+- Standard file locations (`~/.config/{binary}/`)
+- Environment variable binding
+- Config precedence: flags > env > file > defaults
+- Credential helper for username/password patterns
+
+### `cache`
+File and memory caching:
+- File-based caching with JSON serialization
+- In-memory LRU cache with size limits
+- XDG-compliant cache directories (`~/.cache/{binary}/`)
+- Cache key generation from parameters
+- Automatic expiration handling
+
+### `kongx`
+Kong CLI framework extensions:
+- Common flag definitions
+- Standard Run method patterns
+- Help formatting
+
+## Usage
+
+### In Your CLI
+
+```go
+// In your go.mod
+require github.com/dl-alexandre/cli-tools v1.0.0
+
+// In your main.go or version.go
+import "github.com/dl-alexandre/cli-tools/version"
+
+// Set build-time variables via ldflags:
+// go build -ldflags "-X github.com/dl-alexandre/cli-tools/version.Version=v1.0.0 -X github.com/dl-alexandre/cli-tools/version.BinaryName=myapp"
+
+// Use in your CLI:
+fmt.Println(version.String())
+```
+
+### Example: Update Checking
+
+```go
+import (
+    "github.com/dl-alexandre/cli-tools/update"
+    "github.com/dl-alexandre/cli-tools/version"
+)
+
+// Create checker
+checker := update.New(update.Config{
+    CurrentVersion: version.Version,
+    BinaryName:     "myapp",
+    GitHubRepo:     "myuser/myapp",  // or GitHubOwner: "myuser", GitHubRepoName: "myapp"
+    InstallCommand: "brew upgrade myapp",  // optional
+})
+
+// Check for updates (uses cache)
+info, err := checker.Check(false)
+if err != nil {
+    return err
+}
+
+// Display result
+update.DisplayUpdate(info, "myapp", "table", "brew upgrade myapp")
+```
+
+### Example: Configuration
+
+```go
+import "github.com/dl-alexandre/cli-tools/config"
+
+// Create loader
+loader := config.NewLoader("myapp", "MYAPP")
+
+// Set defaults
+loader.SetDefaults(map[string]interface{}{
+    "api.base_url": "https://api.example.com",
+    "api.timeout": 30,
+})
+
+// Load config
+v, err := loader.Load(config.Flags{
+    ConfigFile: cfg.ConfigFile,
+})
+
+// Get credentials (common pattern)
+username, password, err := config.GetCredentials(
+    flags.Username, flags.Password, "MYAPP",
+)
+```
+
+### Example: Caching
+
+```go
+import "github.com/dl-alexandre/cli-tools/cache"
+
+// File-based cache (default)
+c := cache.New(cache.DefaultDir("myapp"), 24*time.Hour)
+
+// Store data with 1 hour TTL
+c.Set("api-response", data, 1*time.Hour)
+
+// Retrieve cached data
+if cached, ok := c.Get("api-response"); ok {
+    // Use cached data
+}
+
+// Memory cache for hot data (faster, but doesn't persist)
+mc := cache.NewMemory(cache.MemoryOptions{
+    MaxSize: 100,
+    DefaultTTL: 5*time.Minute,
+})
+mc.Set("session-token", token, 30*time.Minute)
+
+// Generate consistent cache keys
+key := cache.GenerateKey("users", map[string]interface{}{
+    "id": 123,
+    "include": "profile",
+})
+```
 
 ## Development
 
-### GoReleaser Configuration
+### Local Development
 
-If you're developing a CLI tool for this tap, see [GoReleaser Configuration Guide](docs/GORELEASER_GUIDE.md) for the exact build configuration needed to integrate with our automation.
+Use a `replace` directive in your CLI's `go.mod` for local development:
 
-### Token Permissions
+```go
+// In your CLI's go.mod
+replace github.com/dl-alexandre/cli-tools => ../cli-tools
+```
 
-The `TAP_TOKEN` secret requires:
-- `contents:write` - To create branches and commit formula updates
-- `pull_requests:write` - To create pull requests with formula updates
+### Running Tests
+
+```bash
+# Run all tests
+go test ./...
+
+# Run tests with coverage
+go test -cover ./...
+
+# Run tests with race detection
+go test -race ./...
+
+# Run benchmarks
+go test -bench=. ./...
+
+# Run specific package tests
+go test ./version
+go test ./update
+go test ./output
+go test ./config
+```
+
+### Test Coverage
+
+The library includes comprehensive test coverage:
+- **Unit tests** for each module
+- **Integration tests** demonstrating end-to-end workflows
+- **Benchmarks** for performance-critical operations
+
+### Writing Tests
+
+When contributing, ensure your tests:
+1. Cover both success and error paths
+2. Use table-driven tests for multiple test cases
+3. Clean up resources (use `t.TempDir()` for temp files)
+4. Include benchmarks for performance-sensitive code
+
+## Versioning
+
+This library follows [Semantic Versioning](https://semver.org/):
+- **v0.x.x** - Initial development, API may change
+- **v1.x.x** - Stable API with backward compatibility guarantees
+
+Current version: **v0.0.0** - Initial release for testing with dl-alexandre CLI tools
+
+## Releasing
+
+To create a new release:
+
+```bash
+# Tag a new version
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The [release workflow](.github/workflows/release.yml) will automatically create a GitHub release.
+
+## License
+
+MIT License - See [LICENSE](LICENSE) file for details
+
+## Contributing
+
+Contributions should:
+1. Follow existing patterns and conventions
+2. Be useful across multiple CLI tools
+3. Not introduce breaking changes without versioning
+4. Include tests for new functionality
