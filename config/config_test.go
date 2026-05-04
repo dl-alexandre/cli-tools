@@ -60,7 +60,7 @@ func TestExpandPath(t *testing.T) {
 	}{
 		{"empty string", "", ""},
 		{"tilde path", "~/config.yaml", "config.yaml"}, // Will be expanded to home dir
-		{"env var", "$HOME/config.yaml", ""},          // Will be expanded
+		{"env var", "$HOME/config.yaml", ""},           // Will be expanded
 		{"absolute path", "/etc/myapp/config.yaml", "/etc/myapp/config.yaml"},
 		{"relative path", "./config.yaml", "./config.yaml"},
 	}
@@ -89,11 +89,7 @@ func TestExpandPathWithTilde(t *testing.T) {
 }
 
 func TestExpandPathWithEnv(t *testing.T) {
-	// Save and restore env var
-	origTestVar := os.Getenv("TEST_CONFIG_PATH")
-	defer os.Setenv("TEST_CONFIG_PATH", origTestVar)
-
-	os.Setenv("TEST_CONFIG_PATH", "/custom/path")
+	t.Setenv("TEST_CONFIG_PATH", "/custom/path")
 
 	result := expandPath("$TEST_CONFIG_PATH/config.yaml")
 	expected := "/custom/path/config.yaml"
@@ -107,8 +103,8 @@ func TestSetDefaults(t *testing.T) {
 	loader := NewLoader("myapp", "MYAPP")
 
 	defaults := map[string]interface{}{
-		"api.base_url": "https://api.example.com",
-		"api.timeout":  30,
+		"api.base_url":  "https://api.example.com",
+		"api.timeout":   30,
 		"output.format": "table",
 	}
 
@@ -164,16 +160,16 @@ func TestSave(t *testing.T) {
 
 func TestGetCredentials(t *testing.T) {
 	tests := []struct {
-		name           string
-		flagsUsername  string
-		flagsPassword  string
-		envPrefix      string
-		envUsername    string
-		envPassword    string
-		wantErr        bool
-		wantUsername   string
-		wantPassword   string
-		errContains    string
+		name          string
+		flagsUsername string
+		flagsPassword string
+		envPrefix     string
+		envUsername   string
+		envPassword   string
+		wantErr       bool
+		wantUsername  string
+		wantPassword  string
+		errContains   string
 	}{
 		{
 			name:          "from flags only",
@@ -204,14 +200,15 @@ func TestGetCredentials(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv(tt.envPrefix+"_USERNAME", "")
+			t.Setenv(tt.envPrefix+"_PASSWORD", "")
+
 			// Set up env vars
 			if tt.envUsername != "" {
-				os.Setenv(tt.envPrefix+"_USERNAME", tt.envUsername)
-				defer os.Unsetenv(tt.envPrefix + "_USERNAME")
+				t.Setenv(tt.envPrefix+"_USERNAME", tt.envUsername)
 			}
 			if tt.envPassword != "" {
-				os.Setenv(tt.envPrefix+"_PASSWORD", tt.envPassword)
-				defer os.Unsetenv(tt.envPrefix + "_PASSWORD")
+				t.Setenv(tt.envPrefix+"_PASSWORD", tt.envPassword)
 			}
 
 			username, password, err := GetCredentials(tt.flagsUsername, tt.flagsPassword, tt.envPrefix)
@@ -239,25 +236,8 @@ func TestGetCredentials(t *testing.T) {
 }
 
 func TestGetCredentialsFromEnv(t *testing.T) {
-	// Save and restore env vars
-	origUser := os.Getenv("TESTAPP_USERNAME")
-	origPass := os.Getenv("TESTAPP_PASSWORD")
-	defer func() {
-		if origUser != "" {
-			os.Setenv("TESTAPP_USERNAME", origUser)
-		} else {
-			os.Unsetenv("TESTAPP_USERNAME")
-		}
-		if origPass != "" {
-			os.Setenv("TESTAPP_PASSWORD", origPass)
-		} else {
-			os.Unsetenv("TESTAPP_PASSWORD")
-		}
-	}()
-
-	// Set env vars
-	os.Setenv("TESTAPP_USERNAME", "envuser")
-	os.Setenv("TESTAPP_PASSWORD", "envpass")
+	t.Setenv("TESTAPP_USERNAME", "envuser")
+	t.Setenv("TESTAPP_PASSWORD", "envpass")
 
 	username, password, err := GetCredentials("", "", "TESTAPP")
 
@@ -273,25 +253,8 @@ func TestGetCredentialsFromEnv(t *testing.T) {
 }
 
 func TestGetCredentialsFlagsOverrideEnv(t *testing.T) {
-	// Save and restore env vars
-	origUser := os.Getenv("TESTAPP_USERNAME")
-	origPass := os.Getenv("TESTAPP_PASSWORD")
-	defer func() {
-		if origUser != "" {
-			os.Setenv("TESTAPP_USERNAME", origUser)
-		} else {
-			os.Unsetenv("TESTAPP_USERNAME")
-		}
-		if origPass != "" {
-			os.Setenv("TESTAPP_PASSWORD", origPass)
-		} else {
-			os.Unsetenv("TESTAPP_PASSWORD")
-		}
-	}()
-
-	// Set env vars
-	os.Setenv("TESTAPP_USERNAME", "envuser")
-	os.Setenv("TESTAPP_PASSWORD", "envpass")
+	t.Setenv("TESTAPP_USERNAME", "envuser")
+	t.Setenv("TESTAPP_PASSWORD", "envpass")
 
 	// Flags should override env
 	username, password, err := GetCredentials("flaguser", "flagpass", "TESTAPP")
@@ -308,19 +271,15 @@ func TestGetCredentialsFlagsOverrideEnv(t *testing.T) {
 }
 
 func TestGetEnvOrDefault(t *testing.T) {
-	// Save and restore env var
-	origVar := os.Getenv("TEST_VAR")
-	defer os.Setenv("TEST_VAR", origVar)
-
 	// Test with env var set
-	os.Setenv("TEST_VAR", "from_env")
+	t.Setenv("TEST_VAR", "from_env")
 	result := GetEnvOrDefault("TEST_VAR", "default")
 	if result != "from_env" {
 		t.Errorf("GetEnvOrDefault() with env set = %q, want %q", result, "from_env")
 	}
 
 	// Test with env var unset
-	os.Unsetenv("TEST_VAR")
+	t.Setenv("TEST_VAR", "")
 	result = GetEnvOrDefault("TEST_VAR", "default")
 	if result != "default" {
 		t.Errorf("GetEnvOrDefault() with env unset = %q, want %q", result, "default")
@@ -328,26 +287,22 @@ func TestGetEnvOrDefault(t *testing.T) {
 }
 
 func TestGetEnvOrDefaultInt(t *testing.T) {
-	// Save and restore env var
-	origVar := os.Getenv("TEST_INT")
-	defer os.Setenv("TEST_INT", origVar)
-
 	// Test with valid int
-	os.Setenv("TEST_INT", "42")
+	t.Setenv("TEST_INT", "42")
 	result := GetEnvOrDefaultInt("TEST_INT", 10)
 	if result != 42 {
 		t.Errorf("GetEnvOrDefaultInt() with env set = %d, want %d", result, 42)
 	}
 
 	// Test with invalid int
-	os.Setenv("TEST_INT", "not_a_number")
+	t.Setenv("TEST_INT", "not_a_number")
 	result = GetEnvOrDefaultInt("TEST_INT", 10)
 	if result != 0 { // sscanf fails, returns 0
 		t.Errorf("GetEnvOrDefaultInt() with invalid env = %d, want %d", result, 0)
 	}
 
 	// Test with env var unset
-	os.Unsetenv("TEST_INT")
+	t.Setenv("TEST_INT", "")
 	result = GetEnvOrDefaultInt("TEST_INT", 10)
 	if result != 10 {
 		t.Errorf("GetEnvOrDefaultInt() with env unset = %d, want %d", result, 10)

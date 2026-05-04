@@ -67,7 +67,7 @@ func TestFileCacheDelete(t *testing.T) {
 	c := New(tempDir, 1*time.Hour)
 
 	// Set value
-	c.Set("key1", "value1", 0)
+	_ = c.Set("key1", "value1", 0)
 
 	// Delete it
 	err := c.Delete("key1")
@@ -87,9 +87,9 @@ func TestFileCacheClear(t *testing.T) {
 	c := New(tempDir, 1*time.Hour)
 
 	// Set multiple values
-	c.Set("key1", "value1", 0)
-	c.Set("key2", "value2", 0)
-	c.Set("key3", "value3", 0)
+	_ = c.Set("key1", "value1", 0)
+	_ = c.Set("key2", "value2", 0)
+	_ = c.Set("key3", "value3", 0)
 
 	// Clear all
 	err := c.Clear()
@@ -111,9 +111,9 @@ func TestFileCacheKeys(t *testing.T) {
 	c := New(tempDir, 1*time.Hour)
 
 	// Set multiple values
-	c.Set("key1", "value1", 0)
-	c.Set("key2", "value2", 0)
-	c.Set("key3", "value3", 0)
+	_ = c.Set("key1", "value1", 0)
+	_ = c.Set("key2", "value2", 0)
+	_ = c.Set("key3", "value3", 0)
 
 	// Get keys
 	keys := c.Keys()
@@ -178,12 +178,7 @@ func TestDefaultDir(t *testing.T) {
 }
 
 func TestDefaultDirWithXDG(t *testing.T) {
-	// Save original
-	origXDG := os.Getenv("XDG_CACHE_HOME")
-	defer os.Setenv("XDG_CACHE_HOME", origXDG)
-
-	// Set XDG_CACHE_HOME
-	os.Setenv("XDG_CACHE_HOME", "/custom/cache")
+	t.Setenv("XDG_CACHE_HOME", "/custom/cache")
 
 	dir := DefaultDir("testapp")
 	expected := "/custom/cache/testapp"

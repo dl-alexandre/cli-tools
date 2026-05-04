@@ -73,7 +73,7 @@ func TestMemoryCacheDelete(t *testing.T) {
 	})
 
 	// Set value
-	c.Set("key1", "value1", 0)
+	_ = c.Set("key1", "value1", 0)
 
 	// Delete it
 	err := c.Delete("key1")
@@ -95,9 +95,9 @@ func TestMemoryCacheClear(t *testing.T) {
 	})
 
 	// Set multiple values
-	c.Set("key1", "value1", 0)
-	c.Set("key2", "value2", 0)
-	c.Set("key3", "value3", 0)
+	_ = c.Set("key1", "value1", 0)
+	_ = c.Set("key2", "value2", 0)
+	_ = c.Set("key3", "value3", 0)
 
 	// Clear all
 	err := c.Clear()
@@ -121,9 +121,9 @@ func TestMemoryCacheKeys(t *testing.T) {
 	})
 
 	// Set multiple values
-	c.Set("key1", "value1", 0)
-	c.Set("key2", "value2", 0)
-	c.Set("key3", "value3", 0)
+	_ = c.Set("key1", "value1", 0)
+	_ = c.Set("key2", "value2", 0)
+	_ = c.Set("key3", "value3", 0)
 
 	// Get keys
 	keys := c.Keys()
@@ -139,12 +139,12 @@ func TestMemoryCacheLRUEviction(t *testing.T) {
 	})
 
 	// Fill cache to capacity
-	c.Set("key1", "value1", 0)
-	c.Set("key2", "value2", 0)
-	c.Set("key3", "value3", 0)
+	_ = c.Set("key1", "value1", 0)
+	_ = c.Set("key2", "value2", 0)
+	_ = c.Set("key3", "value3", 0)
 
 	// Add one more - should evict least recently used (key1)
-	c.Set("key4", "value4", 0)
+	_ = c.Set("key4", "value4", 0)
 
 	// key1 should be evicted
 	_, ok := c.Get("key1")
@@ -168,7 +168,7 @@ func TestMemoryCacheUpdateExisting(t *testing.T) {
 	})
 
 	// Set initial value
-	c.Set("key1", "value1", 0)
+	_ = c.Set("key1", "value1", 0)
 
 	// Update it
 	err := c.Set("key1", "value2", 0)
@@ -193,9 +193,9 @@ func TestMemoryCacheStats(t *testing.T) {
 	})
 
 	// Add some items
-	c.Set("key1", "value1", 0)
-	c.Set("key2", "value2", 0)
-	c.Set("key3", "value3", 0)
+	_ = c.Set("key1", "value1", 0)
+	_ = c.Set("key2", "value2", 0)
+	_ = c.Set("key3", "value3", 0)
 
 	mc := c.(*MemoryCache)
 	stats := mc.Stats()
@@ -289,7 +289,7 @@ func TestMemoryCacheConcurrentAccess(t *testing.T) {
 	// Writer
 	go func() {
 		for i := 0; i < 100; i++ {
-			c.Set(string(rune(i)), i, 0)
+			_ = c.Set(string(rune(i)), i, 0)
 		}
 		done <- true
 	}()

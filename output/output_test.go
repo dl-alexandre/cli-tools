@@ -113,7 +113,7 @@ func TestPrintJSON(t *testing.T) {
 
 			err := f.PrintJSON(tt.data)
 
-			w.Close()
+			_ = w.Close()
 			os.Stdout = old
 
 			if err != nil {
@@ -122,7 +122,7 @@ func TestPrintJSON(t *testing.T) {
 			}
 
 			var buf bytes.Buffer
-			io.Copy(&buf, r)
+			_, _ = io.Copy(&buf, r)
 			output := buf.String()
 
 			// Verify it's valid JSON
@@ -230,11 +230,11 @@ func TestPrintEmptyMessage(t *testing.T) {
 
 	PrintEmptyMessage("users")
 
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r)
 	output := strings.TrimSpace(buf.String())
 
 	expected := "No users found."
@@ -251,11 +251,11 @@ func TestPrintSuccess(t *testing.T) {
 
 	PrintSuccess("Operation completed")
 
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r)
 	output := strings.TrimSpace(buf.String())
 
 	if !strings.HasPrefix(output, "✓") {
@@ -274,11 +274,11 @@ func TestPrintError(t *testing.T) {
 
 	PrintError("Something went wrong")
 
-	w.Close()
+	_ = w.Close()
 	os.Stderr = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r)
 	output := strings.TrimSpace(buf.String())
 
 	if !strings.HasPrefix(output, "✗") {
@@ -297,11 +297,11 @@ func TestPrintWarning(t *testing.T) {
 
 	PrintWarning("This is a warning")
 
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r)
 	output := strings.TrimSpace(buf.String())
 
 	if !strings.HasPrefix(output, "⚠") {
@@ -320,11 +320,11 @@ func TestPrintBanner(t *testing.T) {
 
 	PrintBanner("UPDATE AVAILABLE")
 
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r)
 	output := buf.String()
 
 	// Should contain the title
@@ -351,11 +351,11 @@ func TestPrintBannerWithLongTitle(t *testing.T) {
 
 	PrintBanner("A very long title that might overflow the box width")
 
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r)
 	output := buf.String()
 
 	// Should still print without panicking
@@ -375,11 +375,11 @@ func TestTableBuilderPrintWithEmptyData(t *testing.T) {
 
 	tbl.Print()
 
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r)
 	output := strings.TrimSpace(buf.String())
 
 	if output != "No data to display." {
@@ -404,11 +404,11 @@ func TestTableBuilderPrintWithFallback(t *testing.T) {
 		fmt.Println("fallback output")
 	})
 
-	w.Close()
+	_ = w.Close()
 	os.Stdout = old
 
 	var buf bytes.Buffer
-	io.Copy(&buf, r)
+	_, _ = io.Copy(&buf, r)
 	output := buf.String()
 
 	if !fallbackCalled {

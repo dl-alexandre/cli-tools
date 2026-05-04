@@ -61,7 +61,7 @@ func (c *MemoryCache) Get(key string) (interface{}, bool) {
 
 	// Check if expired
 	if time.Since(entry.createdAt) > entry.ttl {
-		c.Delete(key)
+		_ = c.Delete(key)
 		return nil, false
 	}
 

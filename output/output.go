@@ -106,9 +106,6 @@ func (tb *TableBuilder) Print() {
 
 	if !tb.formatter.NoHeaders || tb.formatter.Color {
 		tb.tbl.Print()
-	} else {
-		// Raw tab-separated output
-		// This is handled by the caller for specific data types
 	}
 }
 

@@ -181,7 +181,9 @@ func TestFetchLatest(t *testing.T) {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(release)
+		if err := json.NewEncoder(w).Encode(release); err != nil {
+			t.Errorf("Encode() error = %v", err)
+		}
 	}))
 	defer server.Close()
 
@@ -280,26 +282,26 @@ func TestIsCIEnvironment(t *testing.T) {
 	originalCI := os.Getenv("CI")
 	originalGitHubActions := os.Getenv("GITHUB_ACTIONS")
 	defer func() {
-		os.Setenv("CI", originalCI)
-		os.Setenv("GITHUB_ACTIONS", originalGitHubActions)
+		_ = os.Setenv("CI", originalCI)
+		_ = os.Setenv("GITHUB_ACTIONS", originalGitHubActions)
 	}()
 
 	// Test with CI=true
-	os.Setenv("CI", "true")
-	os.Unsetenv("GITHUB_ACTIONS")
+	_ = os.Setenv("CI", "true")
+	_ = os.Unsetenv("GITHUB_ACTIONS")
 	if !isCIEnvironment() {
 		t.Error("Expected isCIEnvironment() to return true when CI is set")
 	}
 
 	// Test with no CI vars
-	os.Unsetenv("CI")
-	os.Unsetenv("GITHUB_ACTIONS")
+	_ = os.Unsetenv("CI")
+	_ = os.Unsetenv("GITHUB_ACTIONS")
 	if isCIEnvironment() {
 		t.Error("Expected isCIEnvironment() to return false when no CI vars are set")
 	}
 
 	// Test with GITHUB_ACTIONS=true
-	os.Setenv("GITHUB_ACTIONS", "true")
+	_ = os.Setenv("GITHUB_ACTIONS", "true")
 	if !isCIEnvironment() {
 		t.Error("Expected isCIEnvironment() to return true when GITHUB_ACTIONS is set")
 	}
@@ -319,10 +321,10 @@ func TestDefaultCacheDir(t *testing.T) {
 func TestDefaultCacheDirWithEnv(t *testing.T) {
 	// Save and restore env var
 	origCacheDir := os.Getenv("CACHE_DIR")
-	defer os.Setenv("CACHE_DIR", origCacheDir)
+	defer func() { _ = os.Setenv("CACHE_DIR", origCacheDir) }()
 
 	// Set custom cache dir
-	os.Setenv("CACHE_DIR", "/custom/cache")
+	_ = os.Setenv("CACHE_DIR", "/custom/cache")
 
 	dir := defaultCacheDir("myapp")
 	expected := filepath.Join("/custom/cache", "myapp")

@@ -2,10 +2,10 @@
 // Uses viper for config file management, environment variables, and precedence handling.
 //
 // Configuration precedence (highest to lowest):
-//   1. CLI flags (applied by caller after loading)
-//   2. Environment variables
-//   3. Config file
-//   4. Defaults
+//  1. CLI flags (applied by caller after loading)
+//  2. Environment variables
+//  3. Config file
+//  4. Defaults
 package config
 
 import (
@@ -195,7 +195,7 @@ func GetEnvOrDefault(key, defaultValue string) string {
 func GetEnvOrDefaultInt(key string, defaultValue int) int {
 	if value := os.Getenv(key); value != "" {
 		var result int
-		fmt.Sscanf(value, "%d", &result)
+		_, _ = fmt.Sscanf(value, "%d", &result)
 		return result
 	}
 	return defaultValue
