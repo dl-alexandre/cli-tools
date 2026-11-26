@@ -4,6 +4,8 @@ All notable changes to this project are documented here. This project follows [K
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-26
+
 ### Added
 - `retry` for context-aware operation retries with bounded exponential backoff, jitter, and `Retry-After` support.
 - `appleauth` for ES256 JWT signing from PEM bytes or files, with early-refresh token caching.
@@ -18,5 +20,6 @@ All notable changes to this project are documented here. This project follows [K
 ### Added
 - Initial development release for the CLI tools fleet.
 
-[Unreleased]: https://github.com/dl-alexandre/cli-tools/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/dl-alexandre/cli-tools/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/dl-alexandre/cli-tools/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/dl-alexandre/cli-tools/releases/tag/v0.0.1
