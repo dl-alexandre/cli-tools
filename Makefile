@@ -74,7 +74,7 @@ help:
 	@echo "  bench        - Run benchmarks"
 	@echo "  lint         - Run linter"
 	@echo "  build        - Build all packages"
-	@echo "  build-example- Build example CLI"
+	@echo "  build-example- Build the example CLI"
 	@echo "  clean        - Clean build artifacts"
 	@echo "  deps         - Download and verify dependencies"
 	@echo "  update       - Update dependencies"

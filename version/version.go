@@ -8,6 +8,7 @@ package version
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -79,66 +80,72 @@ func Normalize(v string) string {
 // Compare compares two semantic versions
 // Returns -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2
 func Compare(v1, v2 string) int {
-	// Remove 'v' prefix
-	v1 = strings.TrimPrefix(strings.ToLower(strings.TrimSpace(v1)), "v")
-	v2 = strings.TrimPrefix(strings.ToLower(strings.TrimSpace(v2)), "v")
-
-	pre1 := strings.Contains(v1, "-")
-	pre2 := strings.Contains(v2, "-")
-	if idx := strings.Index(v1, "-"); idx != -1 {
-		v1 = v1[:idx]
-	}
-	if idx := strings.Index(v2, "-"); idx != -1 {
-		v2 = v2[:idx]
-	}
-
-	// Split into parts
-	parts1 := strings.Split(v1, ".")
-	parts2 := strings.Split(v2, ".")
-
-	// Compare each part
-	maxLen := len(parts1)
-	if len(parts2) > maxLen {
-		maxLen = len(parts2)
-	}
-
-	for i := 0; i < maxLen; i++ {
-		var num1, num2 int
-
-		if i < len(parts1) {
-			// Extract numeric part before any pre-release identifier
-			part := parts1[i]
-			if idx := strings.IndexAny(part, "-"); idx != -1 {
-				part = part[:idx]
-			}
-			_, _ = fmt.Sscanf(part, "%d", &num1)
-		}
-
-		if i < len(parts2) {
-			part := parts2[i]
-			if idx := strings.IndexAny(part, "-"); idx != -1 {
-				part = part[:idx]
-			}
-			_, _ = fmt.Sscanf(part, "%d", &num2)
-		}
-
-		if num1 < num2 {
+	major1, minor1, patch1, pre1 := parseVersion(v1)
+	major2, minor2, patch2, pre2 := parseVersion(v2)
+	for _, pair := range [][2]uint64{{major1, major2}, {minor1, minor2}, {patch1, patch2}} {
+		if pair[0] < pair[1] {
 			return -1
 		}
-		if num1 > num2 {
+		if pair[0] > pair[1] {
 			return 1
 		}
 	}
+	return comparePrerelease(pre1, pre2)
+}
 
-	// Check pre-release status (v1.0.0-alpha < v1.0.0)
-	if pre1 && !pre2 {
-		return -1
+func parseVersion(value string) (major, minor, patch uint64, prerelease string) {
+	value = strings.TrimPrefix(strings.ToLower(strings.TrimSpace(value)), "v")
+	if before, _, ok := strings.Cut(value, "+"); ok {
+		value = before // build metadata does not affect precedence
 	}
-	if !pre1 && pre2 {
+	if before, after, ok := strings.Cut(value, "-"); ok {
+		value, prerelease = before, after
+	}
+	parts := strings.Split(value, ".")
+	numbers := []*uint64{&major, &minor, &patch}
+	for i := 0; i < min(len(parts), len(numbers)); i++ {
+		*numbers[i], _ = strconv.ParseUint(parts[i], 10, 64)
+	}
+	return major, minor, patch, prerelease
+}
+
+func comparePrerelease(a, b string) int {
+	if a == b {
+		return 0
+	}
+	if a == "" {
 		return 1
 	}
-
-	return 0
+	if b == "" {
+		return -1
+	}
+	left, right := strings.Split(a, "."), strings.Split(b, ".")
+	for i := 0; i < min(len(left), len(right)); i++ {
+		if left[i] == right[i] {
+			continue
+		}
+		leftNumber, leftErr := strconv.ParseUint(left[i], 10, 64)
+		rightNumber, rightErr := strconv.ParseUint(right[i], 10, 64)
+		switch {
+		case leftErr == nil && rightErr == nil:
+			if leftNumber < rightNumber {
+				return -1
+			}
+			return 1
+		case leftErr == nil:
+			return -1
+		case rightErr == nil:
+			return 1
+		case left[i] < right[i]:
+			return -1
+		default:
+			return 1
+		}
+	}
+	if len(left) < len(right) {
+		return -1
+	}
+	return 1
 }
 
 // IsDev returns true if this is a development build

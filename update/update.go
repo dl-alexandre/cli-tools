@@ -11,6 +11,7 @@
 package update
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -19,6 +20,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/dl-alexandre/cli-tools/version"
 )
 
 const (
@@ -94,6 +97,14 @@ func New(config Config) *Checker {
 
 // Check checks for available updates
 func (c *Checker) Check(force bool) (*Info, error) {
+	return c.CheckContext(context.Background(), force)
+}
+
+// CheckContext checks for updates and stops the HTTP request when ctx ends.
+func (c *Checker) CheckContext(ctx context.Context, force bool) (*Info, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	currentVersion := c.Config.CurrentVersion
 	if currentVersion == "" || currentVersion == "dev" {
 		currentVersion = "v0.0.0"
@@ -107,7 +118,7 @@ func (c *Checker) Check(force bool) (*Info, error) {
 	}
 
 	// Fetch latest release from GitHub
-	info, err := c.fetchLatest(currentVersion)
+	info, err := c.fetchLatestContext(ctx, currentVersion)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check for updates: %w", err)
 	}
@@ -122,13 +133,17 @@ func (c *Checker) Check(force bool) (*Info, error) {
 
 // fetchLatest queries GitHub API for the latest release
 func (c *Checker) fetchLatest(currentVersion string) (*Info, error) {
+	return c.fetchLatestContext(context.Background(), currentVersion)
+}
+
+func (c *Checker) fetchLatestContext(ctx context.Context, currentVersion string) (*Info, error) {
 	client := &http.Client{
 		Timeout: 10 * time.Second,
 	}
 
 	apiURL := c.buildGitHubAPIURL()
 
-	req, err := http.NewRequest("GET", apiURL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, apiURL, http.NoBody)
 	if err != nil {
 		return nil, err
 	}
@@ -360,75 +375,10 @@ func isCIEnvironment() bool {
 
 // normalizeVersion ensures version starts with 'v'
 func normalizeVersion(v string) string {
-	v = strings.TrimSpace(v)
-	if v == "" {
-		return "v0.0.0"
-	}
-	if !strings.HasPrefix(v, "v") && !strings.HasPrefix(v, "V") {
-		return "v" + v
-	}
-	return strings.ToLower(v)
+	return version.Normalize(v)
 }
 
 // compareVersions compares two semantic versions
 func compareVersions(v1, v2 string) int {
-	// Remove 'v' prefix
-	v1 = strings.TrimPrefix(strings.ToLower(strings.TrimSpace(v1)), "v")
-	v2 = strings.TrimPrefix(strings.ToLower(strings.TrimSpace(v2)), "v")
-
-	pre1 := strings.Contains(v1, "-")
-	pre2 := strings.Contains(v2, "-")
-	if idx := strings.Index(v1, "-"); idx != -1 {
-		v1 = v1[:idx]
-	}
-	if idx := strings.Index(v2, "-"); idx != -1 {
-		v2 = v2[:idx]
-	}
-
-	// Split into parts
-	parts1 := strings.Split(v1, ".")
-	parts2 := strings.Split(v2, ".")
-
-	// Compare each part
-	maxLen := len(parts1)
-	if len(parts2) > maxLen {
-		maxLen = len(parts2)
-	}
-
-	for i := 0; i < maxLen; i++ {
-		var num1, num2 int
-
-		if i < len(parts1) {
-			part := parts1[i]
-			if idx := strings.IndexAny(part, "-"); idx != -1 {
-				part = part[:idx]
-			}
-			_, _ = fmt.Sscanf(part, "%d", &num1)
-		}
-
-		if i < len(parts2) {
-			part := parts2[i]
-			if idx := strings.IndexAny(part, "-"); idx != -1 {
-				part = part[:idx]
-			}
-			_, _ = fmt.Sscanf(part, "%d", &num2)
-		}
-
-		if num1 < num2 {
-			return -1
-		}
-		if num1 > num2 {
-			return 1
-		}
-	}
-
-	// Check pre-release status
-	if pre1 && !pre2 {
-		return -1
-	}
-	if !pre1 && pre2 {
-		return 1
-	}
-
-	return 0
+	return version.Compare(v1, v2)
 }

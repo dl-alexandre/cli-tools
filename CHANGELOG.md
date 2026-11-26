@@ -1,28 +1,22 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+All notable changes to this project are documented here. This project follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Added
-- Initial release with core functionality
-- `version` package for build-time version management
-- `update` package for GitHub release checking
-- `output` package for table/JSON formatting
-- `config` package for configuration management
-- `kongx` package for Kong CLI framework extensions
-- Comprehensive test suite with >90% coverage
-- CI/CD workflows for testing and releases
+- `retry` for context-aware operation retries with bounded exponential backoff, jitter, and `Retry-After` support.
+- `appleauth` for ES256 JWT signing from PEM bytes or files, with early-refresh token caching.
 
-## [0.0.0] - 2024-03-30
+### Changed
+- Document the supported package set as `version`, `update`, `cache`, `retry`, and `appleauth`.
+- Remove unused package implementations and their dependencies.
+- Keep existing `version`, `update`, and `cache` public entry points available.
+
+## [0.0.1] - 2024-03-30
 
 ### Added
-- Initial development release for testing with dl-alexandre CLI tools
-- All core packages functional and tested
-- Example CLI demonstrating usage patterns
+- Initial development release for the CLI tools fleet.
 
-[Unreleased]: https://github.com/dl-alexandre/cli-tools/compare/v0.0.0...HEAD
-[0.0.0]: https://github.com/dl-alexandre/cli-tools/releases/tag/v0.0.0
+[Unreleased]: https://github.com/dl-alexandre/cli-tools/compare/v0.0.1...HEAD
+[0.0.1]: https://github.com/dl-alexandre/cli-tools/releases/tag/v0.0.1

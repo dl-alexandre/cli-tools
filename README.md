@@ -2,265 +2,120 @@
 
 [![CI](https://github.com/dl-alexandre/cli-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/dl-alexandre/cli-tools/actions/workflows/ci.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dl-alexandre/cli-tools)](https://goreportcard.com/report/github.com/dl-alexandre/cli-tools)
-[![GoDoc](https://godoc.org/github.com/dl-alexandre/cli-tools?status.svg)](https://godoc.org/github.com/dl-alexandre/cli-tools)
+[![Go Reference](https://pkg.go.dev/badge/github.com/dl-alexandre/cli-tools.svg)](https://pkg.go.dev/github.com/dl-alexandre/cli-tools)
 
-A Go library providing common functionality for CLI applications. Reduce boilerplate code and ensure consistent behavior across your CLI tools.
+`cli-tools` contains shared, focused helpers for Go CLI applications. It targets Go 1.26 and keeps its exported APIs small so each CLI can retain its own command framework and presentation layer.
 
-## Features
+## Packages
 
-- **Version Management** - Semantic versioning, build-time variables, version comparison
-- **Update Checking** - Automatic GitHub release checking with caching
-- **Output Formatting** - Table and JSON output, color detection, message helpers
-- **Configuration** - Viper-based config with environment variable support
-- **CLI Framework Helpers** - Extensions for the Kong CLI framework
+- **`version`** — build metadata, version formatting, normalization, and comparison.
+- **`update`** — GitHub latest-release checks, cached results, and update notices.
+- **`cache`** — JSON file cache and thread-safe in-memory LRU cache.
+- **`retry`** — context-aware operation retries with exponential backoff, jitter, and HTTP `Retry-After` support.
+- **`appleauth`** — ES256 JWT signing from PEM or key files, with thread-safe token caching and early refresh.
 
-## Installation
+## Install
 
-```bash
-go get github.com/dl-alexandre/cli-tools
+```sh
+go get github.com/dl-alexandre/cli-tools@v0.0.1
 ```
 
-## Quick Start
+## Quick start
 
 ```go
 package main
 
 import (
-    "fmt"
-    "github.com/dl-alexandre/cli-tools/version"
+	"fmt"
+
+	"github.com/dl-alexandre/cli-tools/version"
 )
 
 func main() {
-    fmt.Println(version.String())
+	fmt.Println(version.String())
 }
 ```
 
-Build with version info:
-```bash
-go build -ldflags "-X github.com/dl-alexandre/cli-tools/version.Version=v1.0.0"
+Set build metadata with linker flags:
+
+```sh
+go build -ldflags "-X github.com/dl-alexandre/cli-tools/version.Version=v1.2.3 -X github.com/dl-alexandre/cli-tools/version.BinaryName=myapp"
 ```
 
-## Modules
+## Examples
 
-### `version`
-Build-time version management including:
-- Semantic version handling
-- Version comparison
-- Development build detection
-- Formatted version string output
-
-### `update`
-GitHub release update checking:
-- Automatic update detection
-- 24-hour caching
-- CI environment detection (skips in CI)
-- Standardized update notification format
-
-### `output`
-Output formatting utilities:
-- Table formatting with `rodaine/table`
-- JSON output formatting
-- Color/auto-detection with `go-isatty`
-- Common message helpers (success, error, warning)
-- Banner printing
-
-### `config`
-Configuration management:
-- Viper-based configuration
-- Standard file locations (`~/.config/{binary}/`)
-- Environment variable binding
-- Config precedence: flags > env > file > defaults
-- Credential helper for username/password patterns
-
-### `cache`
-File and memory caching:
-- File-based caching with JSON serialization
-- In-memory LRU cache with size limits
-- XDG-compliant cache directories (`~/.cache/{binary}/`)
-- Cache key generation from parameters
-- Automatic expiration handling
-
-### `kongx`
-Kong CLI framework extensions:
-- Common flag definitions
-- Standard Run method patterns
-- Help formatting
-
-## Usage
-
-### In Your CLI
+### Retry a transient operation
 
 ```go
-// In your go.mod
-require github.com/dl-alexandre/cli-tools v1.0.0
-
-// In your main.go or version.go
-import "github.com/dl-alexandre/cli-tools/version"
-
-// Set build-time variables via ldflags:
-// go build -ldflags "-X github.com/dl-alexandre/cli-tools/version.Version=v1.0.0 -X github.com/dl-alexandre/cli-tools/version.BinaryName=myapp"
-
-// Use in your CLI:
-fmt.Println(version.String())
-```
-
-### Example: Update Checking
-
-```go
-import (
-    "github.com/dl-alexandre/cli-tools/update"
-    "github.com/dl-alexandre/cli-tools/version"
-)
-
-// Create checker
-checker := update.New(update.Config{
-    CurrentVersion: version.Version,
-    BinaryName:     "myapp",
-    GitHubRepo:     "myuser/myapp",  // or GitHubOwner: "myuser", GitHubRepoName: "myapp"
-    InstallCommand: "brew upgrade myapp",  // optional
+result := retry.Do(ctx, retry.Config{
+	MaxAttempts: 4, // includes the first attempt
+}, func(ctx context.Context) retry.Result[*http.Response] {
+	resp, err := client.Do(request.WithContext(ctx))
+	if err != nil {
+		return retry.Result[*http.Response]{Err: err, Retry: isTemporary(err)}
+	}
+	if resp.StatusCode == http.StatusTooManyRequests || resp.StatusCode >= 500 {
+		wait, _ := retry.RetryAfter(resp.Header.Get("Retry-After"))
+		return retry.Result[*http.Response]{Value: resp, Retry: true, RetryAfter: wait}
+	}
+	return retry.Result[*http.Response]{Value: resp}
 })
+if result.Err != nil {
+	return result.Err
+}
+```
 
-// Check for updates (uses cache)
+`Retry-After` accepts delay seconds and HTTP dates. The operation decides which errors and response codes are safe to retry.
+
+### Sign an Apple ES256 token
+
+```go
+signer, err := appleauth.NewFromFile(appleauth.Config{
+	KeyID:    "ABC123DEFG",
+	TeamID:   "DEF123GHIJ", // used as iss when Issuer is not set
+	Audience: "appstoreconnect-v1",
+	TTL:      15 * time.Minute,
+}, "AuthKey_ABC123DEFG.p8")
+if err != nil {
+	return err
+}
+
+token, err := signer.Token() // reused until the early-refresh window
+```
+
+`appleauth.New(config, pemBytes)` accepts key bytes directly. `Issuer` takes precedence over `TeamID` for the JWT `iss` claim.
+
+### Cache a value
+
+```go
+c := cache.New(cache.DefaultDir("myapp"), 24*time.Hour)
+if err := c.Set("response", payload, time.Hour); err != nil {
+	return err
+}
+```
+
+### Check for updates
+
+```go
+checker := update.New(update.Config{
+	CurrentVersion: version.Version,
+	BinaryName:     "myapp",
+	GitHubRepo:     "owner/myapp",
+})
 info, err := checker.Check(false)
 if err != nil {
-    return err
+	return err
 }
-
-// Display result
-update.DisplayUpdate(info, "myapp", "table", "brew upgrade myapp")
-```
-
-### Example: Configuration
-
-```go
-import "github.com/dl-alexandre/cli-tools/config"
-
-// Create loader
-loader := config.NewLoader("myapp", "MYAPP")
-
-// Set defaults
-loader.SetDefaults(map[string]interface{}{
-    "api.base_url": "https://api.example.com",
-    "api.timeout": 30,
-})
-
-// Load config
-v, err := loader.Load(config.Flags{
-    ConfigFile: cfg.ConfigFile,
-})
-
-// Get credentials (common pattern)
-username, password, err := config.GetCredentials(
-    flags.Username, flags.Password, "MYAPP",
-)
-```
-
-### Example: Caching
-
-```go
-import "github.com/dl-alexandre/cli-tools/cache"
-
-// File-based cache (default)
-c := cache.New(cache.DefaultDir("myapp"), 24*time.Hour)
-
-// Store data with 1 hour TTL
-c.Set("api-response", data, 1*time.Hour)
-
-// Retrieve cached data
-if cached, ok := c.Get("api-response"); ok {
-    // Use cached data
-}
-
-// Memory cache for hot data (faster, but doesn't persist)
-mc := cache.NewMemory(cache.MemoryOptions{
-    MaxSize: 100,
-    DefaultTTL: 5*time.Minute,
-})
-mc.Set("session-token", token, 30*time.Minute)
-
-// Generate consistent cache keys
-key := cache.GenerateKey("users", map[string]interface{}{
-    "id": 123,
-    "include": "profile",
-})
+return update.DisplayUpdate(info, "myapp", "table", "brew upgrade myapp")
 ```
 
 ## Development
 
-### Local Development
-
-Use a `replace` directive in your CLI's `go.mod` for local development:
-
-```go
-// In your CLI's go.mod
-replace github.com/dl-alexandre/cli-tools => ../cli-tools
-```
-
-### Running Tests
-
-```bash
-# Run all tests
-go test ./...
-
-# Run tests with coverage
-go test -cover ./...
-
-# Run tests with race detection
+```sh
+go mod tidy
 go test -race ./...
-
-# Run benchmarks
-go test -bench=. ./...
-
-# Run specific package tests
-go test ./version
-go test ./update
-go test ./output
-go test ./config
+go vet ./...
+golangci-lint run
 ```
 
-### Test Coverage
-
-The library includes comprehensive test coverage:
-- **Unit tests** for each module
-- **Integration tests** demonstrating end-to-end workflows
-- **Benchmarks** for performance-critical operations
-
-### Writing Tests
-
-When contributing, ensure your tests:
-1. Cover both success and error paths
-2. Use table-driven tests for multiple test cases
-3. Clean up resources (use `t.TempDir()` for temp files)
-4. Include benchmarks for performance-sensitive code
-
-## Versioning
-
-This library follows [Semantic Versioning](https://semver.org/):
-- **v0.x.x** - Initial development, API may change
-- **v1.x.x** - Stable API with backward compatibility guarantees
-
-Current version: **v0.0.0** - Initial release for testing with dl-alexandre CLI tools
-
-## Releasing
-
-To create a new release:
-
-```bash
-# Tag a new version
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-The [release workflow](.github/workflows/release.yml) will automatically create a GitHub release.
-
-## License
-
-MIT License - See [LICENSE](LICENSE) file for details
-
-## Contributing
-
-Contributions should:
-1. Follow existing patterns and conventions
-2. Be useful across multiple CLI tools
-3. Not introduce breaking changes without versioning
-4. Include tests for new functionality
+For compatibility, the library keeps the existing `version.Version`, `version.String()`, `update.New(...)`, and cache APIs stable.

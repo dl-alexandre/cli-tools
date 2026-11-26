@@ -50,8 +50,10 @@ func TestCompare(t *testing.T) {
 		{"patch version greater", "v1.0.2", "v1.0.1", 1},
 		{"prerelease less than stable", "v1.0.0-alpha", "v1.0.0", -1},
 		{"stable greater than prerelease", "v1.0.0", "v1.0.0-alpha", 1},
-		{"different prereleases", "v1.0.0-alpha", "v1.0.0-beta", 0}, // Same version numbers
-		{"different prereleases same version", "v1.0.0-alpha.1", "v1.0.0-alpha.2", 0},
+		{"prerelease identifiers", "v1.0.0-alpha", "v1.0.0-beta", -1},
+		{"numeric prerelease identifiers", "v1.0.0-alpha.1", "v1.0.0-alpha.2", -1},
+		{"release after prerelease", "v1.0.0-rc.1", "v1.0.0", -1},
+		{"build metadata ignored", "v1.0.0+build.1", "1.0.0+build.2", 0},
 		{"0.x versions", "v0.1.0", "v0.2.0", -1},
 		{"different lengths v1 shorter", "v1.0", "v1.0.0", 0},
 		{"different lengths v2 shorter", "v1.0.0", "v1.0", 0},

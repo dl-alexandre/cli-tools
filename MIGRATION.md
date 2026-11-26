@@ -1,326 +1,83 @@
 # Migration Guide
 
-This guide shows how to migrate an existing CLI to use the `cli-tools` shared library.
+`cli-tools` provides version metadata, update checks, caching, retry policy, and Apple ES256 signing. Add only the packages your CLI needs.
 
-## Step 1: Update go.mod
+## Add the module
 
-Add the dependency:
-
-```bash
-go get github.com/dl-alexandre/cli-tools
+```sh
+go get github.com/dl-alexandre/cli-tools@v0.0.1
 ```
 
-Or manually add to `go.mod`:
+## Replace version metadata
 
 ```go
-require github.com/dl-alexandre/cli-tools v1.0.0
-```
-
-## Step 2: Replace version.go
-
-**Before (internal/cli/version.go):**
-
-```go
-package cli
-
-var (
-    Version    = "dev"
-    BinaryName = "unifi"
-    GitHubRepo = "Local-UniFi-CLI"
-    GitCommit  = "unknown"
-    BuildTime  = "unknown"
-)
-```
-
-**After:**
-
-```go
-package cli
-
 import "github.com/dl-alexandre/cli-tools/version"
 
-func init() {
-    // Set your CLI-specific values
-    version.BinaryName = "unifi"
-    version.GitHubRepo = "Local-UniFi-CLI"
-    // Version, GitCommit, BuildTime are set at build time via ldflags
-}
-
-// Re-export for backward compatibility
-var (
-    Version   = version.Version
-    GitCommit = version.GitCommit
-    BuildTime = version.BuildTime
-)
+func Version() string { return version.String() }
 ```
 
-**Update your build flags:**
+Set values at build time:
 
-Change from:
-```bash
-go build -ldflags "-X main.Version=1.0.0"
+```sh
+go build -ldflags "-X github.com/dl-alexandre/cli-tools/version.Version=v1.0.0 -X github.com/dl-alexandre/cli-tools/version.BinaryName=myapp -X github.com/dl-alexandre/cli-tools/version.GitCommit=$GIT_COMMIT -X github.com/dl-alexandre/cli-tools/version.BuildTime=$BUILD_TIME"
 ```
 
-To:
-```bash
-go build -ldflags "-X github.com/dl-alexandre/cli-tools/version.Version=1.0.0"
-```
-
-## Step 3: Replace update.go
-
-**Before (internal/cli/update.go):**
-
-~300 lines of duplicated code for GitHub API calls, caching, version comparison...
-
-**After:**
+## Replace update checks
 
 ```go
-package cli
-
-import (
-    "github.com/dl-alexandre/cli-tools/update"
-    "github.com/dl-alexandre/cli-tools/version"
-)
-
-type UpdateCheckCmd struct {
-    Force  bool   `help:"Force check, bypassing cache" flag:"force"`
-    Format string `help:"Output format" enum:"table,json" default:"table"`
+checker := update.New(update.Config{
+	CurrentVersion: version.Version,
+	BinaryName:     "myapp",
+	GitHubRepo:     "owner/myapp",
+	InstallCommand: "brew upgrade myapp",
+})
+info, err := checker.Check(false)
+if err != nil {
+	return err
 }
-
-func (c *UpdateCheckCmd) Run(globals *Globals) error {
-    checker := update.New(update.Config{
-        CurrentVersion: version.Version,
-        BinaryName:     version.BinaryName,
-        GitHubRepo:     "myuser/myapp",  // full repo path
-        InstallCommand: "brew upgrade myapp",  // optional
-    })
-
-    info, err := checker.Check(c.Force)
-    if err != nil {
-        return err
-    }
-
-    return update.DisplayUpdate(info, version.BinaryName, c.Format, "brew upgrade myapp")
-}
-
-// Auto-update check at startup:
-func AutoUpdateCheck() {
-    checker := update.New(update.Config{
-        CurrentVersion: version.Version,
-        BinaryName:     version.BinaryName,
-        GitHubRepo:     "myuser/myapp",
-        InstallCommand: "brew upgrade myapp",
-    })
-    checker.AutoCheck()
-}
+return update.DisplayUpdate(info, "myapp", "table", checker.Config.InstallCommand)
 ```
 
-**Lines of code: 300 → 30 (90% reduction)**
+`update.New` keeps the existing configuration shape and applies a 24-hour cache by default. Use `Check(true)` to bypass the cache.
 
-## Step 4: Replace output/formatter.go
-
-**Before (internal/pkg/output/formatter.go):**
-
-~477 lines with table formatting, color detection, JSON output...
-
-**After:**
+## Add caching
 
 ```go
-package output
-
-import (
-    "github.com/dl-alexandre/cli-tools/output"
-)
-
-// Use the shared formatter
-type Formatter = output.Formatter
-
-// Custom data types for your CLI
-type SiteData struct {
-    ID          string
-    Name        string
-    Description string
-    Devices     int
-    Clients     int
+fileCache := cache.New(cache.DefaultDir("myapp"), 24*time.Hour)
+if err := fileCache.Set("key", value, time.Hour); err != nil {
+	return err
+}
+if value, ok := fileCache.Get("key"); ok {
+	_ = value
 }
 
-func PrintSitesTable(sites []SiteData, formatter *output.Formatter) {
-    if len(sites) == 0 {
-        output.PrintEmptyMessage("sites")
-        return
-    }
-
-    tbl := formatter.NewTable("ID", "Name", "Description", "Devices", "Clients")
-    for _, site := range sites {
-        desc := site.Description
-        if desc == "" {
-            desc = "-"
-        }
-        tbl.AddRow(site.ID, site.Name, desc, site.Devices, site.Clients)
-    }
-    tbl.Print()
-}
+memoryCache := cache.NewMemory(cache.MemoryOptions{MaxSize: 100})
 ```
 
-## Step 5: Replace config/config.go
+## Add retry policy
 
-**Before (internal/pkg/config/config.go):**
-
-~220 lines of viper setup, env binding, config file handling...
-
-**After:**
+Wrap an operation and mark only transient failures as retryable. For HTTP status responses, set `RetryAfter` using the `Retry-After` header when present.
 
 ```go
-package config
-
-import (
-    "github.com/dl-alexandre/cli-tools/config"
-)
-
-type Config struct {
-    API    APIConfig    `mapstructure:"api"`
-    Auth   AuthConfig   `mapstructure:"auth"`
-    Output OutputConfig `mapstructure:"output"`
-}
-
-type APIConfig struct {
-    BaseURL string `mapstructure:"base_url"`
-    Timeout int    `mapstructure:"timeout"`
-}
-
-type AuthConfig struct {
-    Username string `mapstructure:"username"`
-}
-
-type OutputConfig struct {
-    Format    string `mapstructure:"format"`
-    Color     string `mapstructure:"color"`
-    NoHeaders bool   `mapstructure:"no_headers"`
-}
-
-func Load(flags GlobalFlags) (*Config, error) {
-    loader := config.NewLoader("unifi", "UNIFI")
-    
-    loader.SetDefaults(map[string]interface{}{
-        "api.base_url": "https://unifi.local",
-        "api.timeout": 30,
-        "output.format": "table",
-        "output.color": "auto",
-    })
-
-    v, err := loader.Load(config.Flags{
-        ConfigFile: flags.ConfigFile,
-    })
-    if err != nil {
-        return nil, err
-    }
-
-    var cfg Config
-    if err := v.Unmarshal(&cfg); err != nil {
-        return nil, err
-    }
-
-    // Apply CLI flags (override config)
-    if flags.BaseURL != "" {
-        cfg.API.BaseURL = flags.BaseURL
-    }
-    if flags.Timeout > 0 {
-        cfg.API.Timeout = flags.Timeout
-    }
-
-    return &cfg, nil
-}
-
-// Use shared credential helper
-func GetCredentials(flagsUsername, flagsPassword string) (string, string, error) {
-    return config.GetCredentials(flagsUsername, flagsPassword, "UNIFI")
-}
+result := retry.Do(ctx, retry.Config{MaxAttempts: 3}, func(ctx context.Context) retry.Result[Response] {
+	value, err := request(ctx)
+	return retry.Result[Response]{Value: value, Err: err, Retry: isTransient(err)}
+})
 ```
 
-## Step 6: Update main.go
-
-**Add auto-update check at startup:**
+## Add Apple token signing
 
 ```go
-func main() {
-    // ... existing setup ...
-
-    // Auto-check for updates (non-blocking)
-    checker := update.New(update.Config{
-        CurrentVersion: version.Version,
-        BinaryName:     version.BinaryName,
-        GitHubRepo:     version.GitHubRepo,
-    })
-    checker.AutoCheck()
-
-    // Run command
-    err = ctx.Run(&cli.Globals)
-    // ...
+signer, err := appleauth.NewFromFile(appleauth.Config{
+	KeyID: "ABC123DEFG",
+	TeamID: "DEF123GHIJ",
+	Audience: "appstoreconnect-v1",
+	TTL: 15 * time.Minute,
+}, "AuthKey_ABC123DEFG.p8")
+if err != nil {
+	return err
 }
+token, err := signer.Token()
 ```
 
-## Step 7: Update .goreleaser.yml
-
-**Update ldflags to point to cli-tools:**
-
-```yaml
-builds:
-  - id: mycli
-    binary: mycli
-    ldflags:
-      - -s -w
-      - -X github.com/dl-alexandre/cli-tools/version.Version={{.Version}}
-      - -X github.com/dl-alexandre/cli-tools/version.GitCommit={{.Commit}}
-      - -X github.com/dl-alexandre/cli-tools/version.BuildTime={{.Date}}
-      - -X github.com/dl-alexandre/cli-tools/version.BinaryName=mycli
-      - -X github.com/dl-alexandre/cli-tools/version.GitHubRepo=mycli-repo
-```
-
-## Benefits Summary
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| version.go | 19 lines | 12 lines | 37% reduction |
-| update.go | ~300 lines | ~30 lines | 90% reduction |
-| output/formatter.go | ~477 lines | ~50 lines | 89% reduction |
-| config/config.go | ~220 lines | ~70 lines | 68% reduction |
-| **Total** | **~1,016 lines** | **~162 lines** | **84% reduction** |
-
-## Testing After Migration
-
-1. Build the CLI:
-   ```bash
-   go build -ldflags "-X github.com/dl-alexandre/cli-tools/version.Version=v1.0.0 -X github.com/dl-alexandre/cli-tools/version.BinaryName=mycli"
-   ```
-
-2. Test version command:
-   ```bash
-   ./mycli version
-   ```
-
-3. Test update check:
-   ```bash
-   ./mycli check-update --force
-   ```
-
-4. Test table output:
-   ```bash
-   ./mycli sites list
-   ./mycli sites list --format json
-   ```
-
-5. Test config loading:
-   ```bash
-   ./mycli sites list --config /path/to/config.yaml
-   ```
-
-## Troubleshooting
-
-### Issue: Version shows "dev" after build
-**Solution:** Ensure ldflags point to `github.com/dl-alexandre/cli-tools/version.Version`, not the old local path.
-
-### Issue: Import cycle errors
-**Solution:** Make sure you're not importing `cli-tools` from your main package back into itself. Use type aliases where needed.
-
-### Issue: Build fails with "undefined: version.BinaryName"
-**Solution:** The `BinaryName` and `GitHubRepo` must be set in your CLI code before the shared library can use them. See Step 2.
+`Issuer` takes precedence over `TeamID` for the JWT issuer claim. The signer caches tokens and refreshes before expiration.
